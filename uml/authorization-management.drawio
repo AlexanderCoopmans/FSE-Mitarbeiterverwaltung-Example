@@ -1,23 +1,20 @@
 <mxfile host="65bd71144e">
     <diagram id="oPPMAmeGuMOg8BbmZ0UJ" name="Seite-1">
-        <mxGraphModel dx="2390" dy="983" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1905" dy="623" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
                 <mxCell id="2" value="&amp;lt;&amp;lt;Aplication Service&amp;gt;&amp;gt;&lt;div&gt;&lt;b&gt;SystemPermissonApplicationService&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;whiteSpace=wrap;" vertex="1" parent="1">
-                    <mxGeometry x="-550" y="40" width="220" height="40" as="geometry"/>
-                </mxCell>
-                <mxCell id="4" value="&lt;div&gt;&amp;lt;&amp;lt;DomainService&amp;gt;&amp;gt;&lt;div&gt;&lt;b&gt;PermissionRevocationService&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;whiteSpace=wrap;" vertex="1" parent="1">
-                    <mxGeometry x="-800" y="170" width="220" height="40" as="geometry"/>
+                    <mxGeometry x="-550" y="130" width="220" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="5" value="&lt;div&gt;&lt;div&gt;&amp;lt;&amp;lt;Repository&amp;gt;&amp;gt;&lt;div style=&quot;font-weight: 700;&quot;&gt;SystemPermissionRepository&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;whiteSpace=wrap;" vertex="1" parent="1">
-                    <mxGeometry x="-280" y="170" width="220" height="40" as="geometry"/>
+                    <mxGeometry x="-360" y="200" width="220" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="8" value="&lt;div style=&quot;&quot;&gt;&amp;lt;&amp;lt;Aggregate Root&amp;gt;&amp;gt;&lt;/div&gt;&lt;div style=&quot;font-weight: 700;&quot;&gt;SystemPermission&lt;/div&gt;" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;whiteSpace=wrap;" vertex="1" parent="1">
-                    <mxGeometry x="-550" y="310" width="240" height="160" as="geometry"/>
+                    <mxGeometry x="-550" y="340" width="240" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="9" value="permissionId: PermissionId&lt;div&gt;employeeReference: E&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;mployeeReference&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;role:Role&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;validityPeriod:V&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;alidityPeriod&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;isRevoked:Boolean&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;revokedAt:DateTime&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;" vertex="1" parent="8">
-                    <mxGeometry y="40" width="240" height="120" as="geometry"/>
+                <mxCell id="9" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;isRevoked:Boolean&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;revokedAt:DateTime&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;" vertex="1" parent="8">
+                    <mxGeometry y="40" width="240" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="15" value="&lt;div style=&quot;&quot;&gt;&amp;lt;&amp;lt;Value Object&amp;gt;&amp;gt;&lt;/div&gt;&lt;div style=&quot;font-weight: 700;&quot;&gt;PermissionID&lt;/div&gt;" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;whiteSpace=wrap;" vertex="1" parent="1">
                     <mxGeometry x="-827" y="480" width="170" height="80" as="geometry"/>
@@ -49,13 +46,13 @@
                 <mxCell id="24" value="employeeNumber:String" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;" vertex="1" parent="23">
                     <mxGeometry y="40" width="170" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="45" value="" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="2" target="4">
+                <mxCell id="45" value="" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.463;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="2" target="8">
                     <mxGeometry width="160" relative="1" as="geometry">
                         <mxPoint x="-190" y="200" as="sourcePoint"/>
-                        <mxPoint x="-470" y="250" as="targetPoint"/>
+                        <mxPoint x="-690" y="170" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="46" value="" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" target="5">
+                <mxCell id="46" value="" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" target="5" source="2">
                     <mxGeometry width="160" relative="1" as="geometry">
                         <mxPoint x="-440" y="80" as="sourcePoint"/>
                         <mxPoint x="-430" y="210" as="targetPoint"/>
@@ -65,12 +62,6 @@
                     <mxGeometry width="160" relative="1" as="geometry">
                         <mxPoint x="-160" y="190" as="sourcePoint"/>
                         <mxPoint x="-440" y="240" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="48" value="" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.455;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="4" target="8">
-                    <mxGeometry width="160" relative="1" as="geometry">
-                        <mxPoint x="-700" y="240" as="sourcePoint"/>
-                        <mxPoint x="-700" y="340" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="49" value="" style="endArrow=diamondThin;endFill=1;endSize=24;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.567;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="15" target="9">
