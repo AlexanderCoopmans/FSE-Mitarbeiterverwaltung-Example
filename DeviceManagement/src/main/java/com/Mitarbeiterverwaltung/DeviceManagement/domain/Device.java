@@ -8,21 +8,21 @@ import java.util.List;
 import java.util.Objects;
 
 public class Device {
-    private final DeviceNumber deviceNumber;
+    private final DeviceId deviceId;
     private final DeviceType deviceType;
     private final String manufacturer;
     private final String designation;
     private final List<DeviceAssignment> assignments = new ArrayList<>();
 
-    private Device(DeviceNumber deviceNumber, DeviceType deviceType, String manufacturer, String designation) {
-        this.deviceNumber = deviceNumber;
+    private Device(DeviceId deviceId, DeviceType deviceType, String manufacturer, String designation) {
+        this.deviceId = deviceId;
         this.deviceType = deviceType;
         this.manufacturer = manufacturer;
         this.designation = designation;
     }
 
-    public static Device of(DeviceNumber number, DeviceType type, String manufacturer, String designation) {
-        Objects.requireNonNull(number, "device number must not be null");
+    public static Device of(DeviceId id, DeviceType type, String manufacturer, String designation) {
+        Objects.requireNonNull(id, "device id must not be null");
         Objects.requireNonNull(type, "device type must not be null");
         if (manufacturer == null || manufacturer.isBlank()) {
             throw new IllegalArgumentException("Manufacturer must not be null or blank");
@@ -30,11 +30,11 @@ public class Device {
         if (designation == null || designation.isBlank()) {
             throw new IllegalArgumentException("Designation must not be null or blank");
         }
-        return new Device(number, type, manufacturer.trim(), designation.trim());
+        return new Device(id, type, manufacturer.trim(), designation.trim());
     }
 
-    public DeviceNumber getDeviceNumber() {
-        return deviceNumber;
+    public DeviceId getDeviceId() {
+        return deviceId;
     }
 
     public DeviceType getDeviceType() {

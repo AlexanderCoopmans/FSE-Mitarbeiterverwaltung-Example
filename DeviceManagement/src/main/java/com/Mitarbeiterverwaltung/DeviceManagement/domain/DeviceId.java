@@ -1,19 +1,24 @@
 package com.Mitarbeiterverwaltung.DeviceManagement.domain;
 
 import java.util.Objects;
+import java.util.UUID;
 
-public final class DeviceNumber {
+public final class DeviceId {
     private final String value;
 
-    private DeviceNumber(String value) {
+    private DeviceId(String value) {
         this.value = value;
     }
 
-    public static DeviceNumber of(String value) {
+    public static DeviceId newId() {
+        return new DeviceId(UUID.randomUUID().toString());
+    }
+
+    public static DeviceId of(String value) {
         if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException("Device number must not be null or blank");
+            throw new IllegalArgumentException("Device id must not be null or blank");
         }
-        return new DeviceNumber(value.trim());
+        return new DeviceId(value.trim());
     }
 
     public String getValue() {
@@ -25,10 +30,10 @@ public final class DeviceNumber {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof DeviceNumber)) {
+        if (!(o instanceof DeviceId)) {
             return false;
         }
-        DeviceNumber that = (DeviceNumber) o;
+        DeviceId that = (DeviceId) o;
         return value.equals(that.value);
     }
 
