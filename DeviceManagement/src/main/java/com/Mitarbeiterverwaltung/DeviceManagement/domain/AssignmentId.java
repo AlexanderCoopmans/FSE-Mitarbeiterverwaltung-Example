@@ -4,25 +4,22 @@ import java.util.Objects;
 import java.util.UUID;
 
 public final class AssignmentId {
-    private final String value;
+    private String id;
 
-    private AssignmentId(String value) {
-        this.value = value;
+    public AssignmentId() {
+        this.id = UUID.randomUUID().toString();
     }
 
-    public static AssignmentId newId() {
-        return new AssignmentId(UUID.randomUUID().toString());
+    public AssignmentId(String id) {
+        this.id = id;
     }
 
-    public static AssignmentId of(String value) {
-        if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException("Assignment id must not be null or blank");
-        }
-        return new AssignmentId(value.trim());
+    public String getId() {
+        return id;
     }
 
-    public String getValue() {
-        return value;
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override
@@ -34,16 +31,16 @@ public final class AssignmentId {
             return false;
         }
         AssignmentId that = (AssignmentId) o;
-        return value.equals(that.value);
+        return id.equals(that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
-        return value;
+        return id;
     }
 }

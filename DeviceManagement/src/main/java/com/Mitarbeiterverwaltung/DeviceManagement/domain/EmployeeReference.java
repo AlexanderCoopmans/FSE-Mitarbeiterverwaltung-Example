@@ -5,15 +5,11 @@ import java.util.Objects;
 public final class EmployeeReference {
     private final String employeeNumber;
 
-    private EmployeeReference(String employeeNumber) {
-        this.employeeNumber = employeeNumber;
-    }
-
-    public static EmployeeReference of(String employeeNumber) {
+    public EmployeeReference(String employeeNumber) {
         if (employeeNumber == null || employeeNumber.isBlank()) {
             throw new IllegalArgumentException("Employee reference must not be null or blank");
         }
-        return new EmployeeReference(employeeNumber.trim());
+        this.employeeNumber = employeeNumber.trim();
     }
 
     public String getEmployeeNumber() {

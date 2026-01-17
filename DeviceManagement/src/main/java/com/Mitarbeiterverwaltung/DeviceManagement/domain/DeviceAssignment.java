@@ -9,16 +9,10 @@ public class DeviceAssignment {
     private ValidityPeriod validityPeriod;
     private LocalDate returnedOn;
 
-    private DeviceAssignment(AssignmentId assignmentId, EmployeeReference employee, ValidityPeriod validityPeriod) {
+    public DeviceAssignment(AssignmentId assignmentId, EmployeeReference employee, ValidityPeriod validityPeriod) {
         this.assignmentId = assignmentId;
         this.employee = employee;
         this.validityPeriod = validityPeriod;
-    }
-
-    public static DeviceAssignment of(EmployeeReference employee, ValidityPeriod period) {
-        Objects.requireNonNull(employee, "employee must not be null");
-        Objects.requireNonNull(period, "period must not be null");
-        return new DeviceAssignment(AssignmentId.newId(), employee, period);
     }
 
     public AssignmentId getAssignmentId() {
