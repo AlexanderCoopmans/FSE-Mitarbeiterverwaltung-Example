@@ -1,28 +1,21 @@
 package com.Mitarbeiterverwaltung.DeviceManagement.domain;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public final class DeviceId {
-    private final String value;
+    private int id;
 
-    private DeviceId(String value) {
-        this.value = value;
+    public DeviceId(int id) {
+        this.id = id;
+
     }
 
-    public static DeviceId newId() {
-        return new DeviceId(UUID.randomUUID().toString());
+    public int getId() {
+        return id;
     }
 
-    public static DeviceId of(String value) {
-        if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException("Device id must not be null or blank");
-        }
-        return new DeviceId(value.trim());
-    }
-
-    public String getValue() {
-        return value;
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
@@ -34,16 +27,16 @@ public final class DeviceId {
             return false;
         }
         DeviceId that = (DeviceId) o;
-        return value.equals(that.value);
+        return id == that.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
-        return value;
+        return String.valueOf(id);
     }
 }
