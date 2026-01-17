@@ -14,8 +14,11 @@ public final class ValidityPeriod {
     }
 
     public static ValidityPeriod of(LocalDate startDate, LocalDate endDate) {
-        if (startDate == null || endDate == null) {
-            throw new IllegalArgumentException("Validity period dates must not be null");
+        if (startDate == null) {
+            throw new IllegalArgumentException("Start date must not be null");
+        }
+        if (endDate == null) {
+            endDate = LocalDate.of(2999, 1, 1);
         }
         if (endDate.isBefore(startDate)) {
             throw new IllegalArgumentException("End date must not be before start date");
