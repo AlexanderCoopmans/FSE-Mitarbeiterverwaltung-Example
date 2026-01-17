@@ -5,19 +5,13 @@ import java.util.Objects;
 public final class ApplicationSystem {
 
     private final String systemName;
-    private final String systemDescription;
 
-    public ApplicationSystem(String systemName, String systemDescription) {
+    public ApplicationSystem(String systemName) {
         this.systemName = requireText(systemName, "systemName");
-        this.systemDescription = requireText(systemDescription, "systemDescription");
     }
 
     public String getSystemName() {
         return systemName;
-    }
-
-    public String getSystemDescription() {
-        return systemDescription;
     }
 
     @Override
@@ -29,17 +23,17 @@ public final class ApplicationSystem {
             return false;
         }
         ApplicationSystem that = (ApplicationSystem) o;
-        return systemName.equals(that.systemName) && systemDescription.equals(that.systemDescription);
+        return systemName.equals(that.systemName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(systemName, systemDescription);
+        return Objects.hash(systemName);
     }
 
     @Override
     public String toString() {
-        return systemName + " (" + systemDescription + ")";
+        return systemName;
     }
 
     private static String requireText(String value, String fieldName) {
