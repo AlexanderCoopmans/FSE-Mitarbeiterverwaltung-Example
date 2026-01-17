@@ -43,6 +43,10 @@ public class Device {
         return designation;
     }
 
+    public DeviceAssignment getCurrentAssignment() {
+        return currentAssignment;
+    }
+
     public DeviceAssignment assignToEmployee(EmployeeReference employee, ValidityPeriod period) {
         Objects.requireNonNull(employee, "employee must not be null");
         Objects.requireNonNull(period, "period must not be null");
