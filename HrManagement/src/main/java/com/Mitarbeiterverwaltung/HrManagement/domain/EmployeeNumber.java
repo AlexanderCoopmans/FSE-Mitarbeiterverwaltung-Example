@@ -3,17 +3,17 @@ package com.Mitarbeiterverwaltung.HrManagement.domain;
 import java.util.Objects;
 
 public final class EmployeeNumber {
-    private final String value;
+    private final int value;
 
-    private EmployeeNumber(String value) {
-        this.value = requireNonBlank(value, "employeeNumber");
+    private EmployeeNumber(int value) {
+        this.value = requireNonNull(value, "employeeNumber");
     }
 
-    public static EmployeeNumber of(String value) {
+    public static EmployeeNumber of(int value) {
         return new EmployeeNumber(value);
     }
 
-    public String getValue() {
+    public int getValue() {
         return value;
     }
 
@@ -26,7 +26,7 @@ public final class EmployeeNumber {
             return false;
         }
         EmployeeNumber that = (EmployeeNumber) o;
-        return value.equals(that.value);
+        return Integer.compare(value, that.value) == 0;
     }
 
     @Override
@@ -36,12 +36,13 @@ public final class EmployeeNumber {
 
     @Override
     public String toString() {
-        return value;
+        return Integer.toString(value);
     }
 
-    private static String requireNonBlank(String value, String fieldName) {
-        if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException(fieldName + " must not be blank");
+
+    private static <T> T requireNonNull(T value, String fieldName) {
+        if (value == null) {
+            throw new IllegalArgumentException(fieldName + " must not be null");
         }
         return value;
     }

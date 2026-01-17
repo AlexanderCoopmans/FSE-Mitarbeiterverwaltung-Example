@@ -47,6 +47,9 @@ public class Employee {
         if (terminationProcessInformation != null) {
             throw new IllegalStateException("Termination process already started");
         }
+        if (terminationDate.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("terminationDate must not be in the past");
+        }
         TerminationProcessInformation info = TerminationProcessInformation.start(
                 requireNonNull(terminationDate, "terminationDate"),
                 requireNonBlank(reason, "reason"));

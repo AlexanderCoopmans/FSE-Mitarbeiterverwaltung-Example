@@ -18,6 +18,9 @@ public final class EmploymentContract {
         if (endDate != null && endDate.isBefore(startDate)) {
             throw new IllegalArgumentException("endDate must not be before startDate");
         }
+        if (endDate == null) {
+            endDate = LocalDate.of(2999, 1, 1);
+        }
         this.endDate = endDate;
     }
 
@@ -29,9 +32,6 @@ public final class EmploymentContract {
         if (newEndDate != null && newEndDate.isBefore(startDate)) {
             throw new IllegalArgumentException("endDate must not be before startDate");
         }
-        if (endDate != null && newEndDate != null && newEndDate.isBefore(endDate)) {
-            throw new IllegalArgumentException("endDate cannot move earlier than existing endDate");
-        }
         return new EmploymentContract(jobTitle, responsibilities, annualSalary, startDate, newEndDate);
     }
 
@@ -42,8 +42,9 @@ public final class EmploymentContract {
         if (endDate == null) {
             return true;
         }
-        return !date.isAfter(endDate);
+        return !date.isAfter(endDate); 
     }
+//terminationDate ist wichtiger als endDate
 
     public String getJobTitle() {
         return jobTitle;
