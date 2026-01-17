@@ -8,12 +8,7 @@ public final class ValidityPeriod {
     private final LocalDate startDate;
     private final LocalDate endDate;
 
-    private ValidityPeriod(LocalDate startDate, LocalDate endDate) {
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
-
-    public static ValidityPeriod of(LocalDate startDate, LocalDate endDate) {
+    public ValidityPeriod(LocalDate startDate, LocalDate endDate) {
         if (startDate == null) {
             throw new IllegalArgumentException("Start date must not be null");
         }
@@ -23,7 +18,8 @@ public final class ValidityPeriod {
         if (endDate.isBefore(startDate)) {
             throw new IllegalArgumentException("End date must not be before start date");
         }
-        return new ValidityPeriod(startDate, endDate);
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public LocalDate getStartDate() {
