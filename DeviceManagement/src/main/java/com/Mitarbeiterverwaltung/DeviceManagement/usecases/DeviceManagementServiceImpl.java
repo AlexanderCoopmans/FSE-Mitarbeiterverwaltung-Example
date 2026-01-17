@@ -5,14 +5,14 @@ import java.util.Optional;
 import com.Mitarbeiterverwaltung.DeviceManagement.domain.Device;
 import com.Mitarbeiterverwaltung.DeviceManagement.domain.DeviceAssignment;
 import com.Mitarbeiterverwaltung.DeviceManagement.domain.DeviceId;
-import com.Mitarbeiterverwaltung.DeviceManagement.usecases.primary.DeviceManagmentService;
+import com.Mitarbeiterverwaltung.DeviceManagement.usecases.primary.DeviceManagementService;
 import com.Mitarbeiterverwaltung.DeviceManagement.usecases.secondary.DeviceRepository;
 
-public class DeviceManagmentServiceImpl implements DeviceManagmentService {
+public class DeviceManagementServiceImpl implements DeviceManagementService {
 
     private final DeviceRepository deviceRepository;
 
-    public DeviceManagmentServiceImpl(DeviceRepository deviceRepository) {
+    public DeviceManagementServiceImpl(DeviceRepository deviceRepository) {
         this.deviceRepository = deviceRepository;
     }
 

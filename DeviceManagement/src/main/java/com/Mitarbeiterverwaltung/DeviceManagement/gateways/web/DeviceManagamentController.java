@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.Mitarbeiterverwaltung.DeviceManagement.usecases.primary.DeviceManagmentService;
+import com.Mitarbeiterverwaltung.DeviceManagement.usecases.primary.DeviceManagementService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,9 +15,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @RestController
 public class DeviceManagamentController {
 
-    private final DeviceManagmentService deviceManagmentService;
+    private final DeviceManagementService deviceManagmentService;
 
-    public DeviceManagamentController(DeviceManagmentService deviceManagmentService) {
+    public DeviceManagamentController(DeviceManagementService deviceManagmentService) {
         this.deviceManagmentService = deviceManagmentService;
     }
 
