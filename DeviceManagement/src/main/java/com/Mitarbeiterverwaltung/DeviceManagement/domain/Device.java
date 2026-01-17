@@ -13,6 +13,7 @@ public class Device {
     private final String manufacturer;
     private final String designation;
     private final List<DeviceAssignment> assignments = new ArrayList<>();
+    private DeviceAssignment currentAssignment;
 
     private Device(DeviceId deviceId, DeviceType deviceType, String manufacturer, String designation) {
         this.deviceId = deviceId;
@@ -56,52 +57,40 @@ public class Device {
     public DeviceAssignment assignToEmployee(EmployeeReference employee, ValidityPeriod period) {
         Objects.requireNonNull(employee, "employee must not be null");
         Objects.requireNonNull(period, "period must not be null");
+        ensureNoActiveAssignment();
         ensureNoOverlappingActiveAssignment(period);
         DeviceAssignment assignment = DeviceAssignment.of(employee, period);
         assignments.add(assignment);
+        currentAssignment = assignment;
         return assignment;
     }
 
-    public void recordReturn(AssignmentId assignmentId, LocalDate returnDate) {
-        Objects.requireNonNull(assignmentId, "assignment id must not be null");
+    public void recordReturn(LocalDate returnDate) {
         Objects.requireNonNull(returnDate, "return date must not be null");
-        DeviceAssignment assignment = findAssignment(assignmentId);
-        assignment.markReturned(returnDate);
+        currentAssignment.markReturned(returnDate);
+        currentAssignment = null;
     }
 
-    public void enforceReturnBy(EmployeeReference employee, LocalDate deadline) {
-        Objects.requireNonNull(employee, "employee must not be null");
+    public void enforceReturnBy(LocalDate deadline) {
         Objects.requireNonNull(deadline, "deadline must not be null");
-        assignments.stream()
-                .filter(a -> a.getEmployee().equals(employee))
-                .filter(a -> !a.isReturned())
-                .forEach(a -> a.shortenValidityTo(deadline));
-    }
-
-    public List<DeviceAssignment> assignmentsForEmployee(EmployeeReference employee) {
-        Objects.requireNonNull(employee, "employee must not be null");
-        List<DeviceAssignment> result = new ArrayList<>();
-        for (DeviceAssignment assignment : assignments) {
-            if (assignment.getEmployee().equals(employee)) {
-                result.add(assignment);
-            }
+        if (currentAssignment != null
+                && !currentAssignment.isReturned()) {
+            currentAssignment.shortenValidityTo(deadline);
         }
-        return Collections.unmodifiableList(result);
     }
 
-    public List<DeviceAssignment> assignmentsDueInMonth(YearMonth month) {
+    public boolean isReturnDueInMonth(YearMonth month) {
         Objects.requireNonNull(month, "month must not be null");
-        List<DeviceAssignment> result = new ArrayList<>();
-        for (DeviceAssignment assignment : assignments) {
-            if (!assignment.isReturned() && assignment.getValidityPeriod().endsInMonth(month)) {
-                result.add(assignment);
-            }
-        }
-        return Collections.unmodifiableList(result);
+        return currentAssignment != null
+                && !currentAssignment.isReturned()
+                && currentAssignment.getValidityPeriod().endsInMonth(month);
     }
 
     public boolean isAssignedTo(EmployeeReference employee) {
-        return assignments.stream().anyMatch(a -> a.getEmployee().equals(employee) && !a.isReturned());
+        Objects.requireNonNull(employee, "employee must not be null");
+        return currentAssignment != null
+                && !currentAssignment.isReturned()
+                && currentAssignment.getEmployee().equals(employee);
     }
 
     private void ensureNoOverlappingActiveAssignment(ValidityPeriod period) {
@@ -112,10 +101,9 @@ public class Device {
         }
     }
 
-    private DeviceAssignment findAssignment(AssignmentId assignmentId) {
-        return assignments.stream()
-                .filter(a -> a.getAssignmentId().equals(assignmentId))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Assignment not found: " + assignmentId.getValue()));
+    private void ensureNoActiveAssignment() {
+        if (currentAssignment != null && !currentAssignment.isReturned()) {
+            throw new IllegalStateException("Device already has an active assignment");
+        }
     }
 }
