@@ -12,6 +12,7 @@ import com.Mitarbeiterverwaltung.DeviceManagement.usecases.DeviceManagementServi
 import com.Mitarbeiterverwaltung.DeviceManagement.usecases.primary.DeviceManagementService;
 import com.Mitarbeiterverwaltung.DeviceManagement.usecases.secondary.AllDevicesReturnedEventPublisher;
 import com.Mitarbeiterverwaltung.DeviceManagement.usecases.secondary.DeviceRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 public class BeanConfiguration {
@@ -27,8 +28,9 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public AllDevicesReturnedEventPublisher allDevicesReturnedEventPublisher(EventPublisher eventPublisher) {
-        return new AllDevicesReturnedEventPublisherImpl(eventPublisher);
+    public AllDevicesReturnedEventPublisher allDevicesReturnedEventPublisher(EventPublisher eventPublisher,
+            ObjectMapper objectMapper) {
+        return new AllDevicesReturnedEventPublisherImpl(eventPublisher, objectMapper);
     }
 
     @Bean

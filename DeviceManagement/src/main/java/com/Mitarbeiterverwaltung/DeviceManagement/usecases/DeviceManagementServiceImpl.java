@@ -108,12 +108,11 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
             return false;
         }
         Device device = deviceOpt.get();
-        device.recordReturn();
-        deviceRepository.save(device);
         EmployeeReference employeeId = device.getCurrentAssignment() != null
                 ? device.getCurrentAssignment().getEmployee()
                 : null;
-
+        device.recordReturn();
+        deviceRepository.save(device);
         if (employeeId == null) {
             return true;
         }

@@ -8,9 +8,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AllDevicesReturnedEventPublisherImpl implements AllDevicesReturnedEventPublisher {
 
     private final EventPublisher eventPublisher;
+    private final ObjectMapper objectMapper;
 
-    public AllDevicesReturnedEventPublisherImpl(EventPublisher eventPublisher) {
+    public AllDevicesReturnedEventPublisherImpl(EventPublisher eventPublisher, ObjectMapper objectMapper) {
         this.eventPublisher = eventPublisher;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -21,7 +23,6 @@ public class AllDevicesReturnedEventPublisherImpl implements AllDevicesReturnedE
 
         String payload = null;
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             payload = objectMapper.writeValueAsString(payloadBody);
         } catch (JsonProcessingException e) {
             System.out.println("Message could not be created. Cause: " + e.getMessage());
