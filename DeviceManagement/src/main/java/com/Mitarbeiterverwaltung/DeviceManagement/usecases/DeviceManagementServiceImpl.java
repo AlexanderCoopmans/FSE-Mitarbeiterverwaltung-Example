@@ -1,6 +1,9 @@
 package com.Mitarbeiterverwaltung.DeviceManagement.usecases;
 
+import java.time.YearMonth;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.Mitarbeiterverwaltung.DeviceManagement.domain.Device;
 import com.Mitarbeiterverwaltung.DeviceManagement.domain.DeviceAssignment;
@@ -22,6 +25,16 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
         return device.map(this::toReadableInformation).orElse("Device nicht gefunden");
     }
 
+    @Override
+    public List<String> assignmentsDueForReturn(YearMonth month) {
+        YearMonth targetMonth = month != null ? month : YearMonth.now();
+        return deviceRepository.findDevicesDueForReturnInMonth(targetMonth).stream()
+                .filter(device -> device.getCurrentAssignment() != null
+                        && !device.getCurrentAssignment().isReturned())
+                .map(this::toReturnInformation)
+                .collect(Collectors.toList());
+    }
+
     private String toReadableInformation(Device device) {
         StringBuilder builder = new StringBuilder();
         builder.append("Device ").append(device.getDeviceId().getId())
@@ -40,6 +53,21 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
             }
         } else {
             builder.append(" | aktuell nicht zugewiesen");
+        }
+        return builder.toString();
+    }
+
+    private String toReturnInformation(Device device) {
+        DeviceAssignment assignment = device.getCurrentAssignment();
+        StringBuilder builder = new StringBuilder();
+        builder.append("Device ").append(device.getDeviceId().getId());
+        if (assignment != null) {
+            builder.append(" Rueckgabe faellig bis ")
+                    .append(assignment.getValidityPeriod().getEndDate())
+                    .append(" | Mitarbeiter ")
+                    .append(assignment.getEmployee().getEmployeeNumber());
+        } else {
+            builder.append(" | keine aktuelle Zuweisung");
         }
         return builder.toString();
     }

@@ -1,7 +1,6 @@
 package com.Mitarbeiterverwaltung.DeviceManagement.gateways.db;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +18,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 		this.deviceEntityRepository = deviceEntityRepository;
 	}
 
+	@Override
 	public Optional<Device> findDeviceById(DeviceId deviceId) {
 
 		Optional<DeviceEntity> deviceEntity = deviceEntityRepository.findById(deviceId.getId());
@@ -27,10 +27,11 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 		return device;
 	}
 
+	@Override
 	public List<Device> findDevicesDueForReturnInMonth(YearMonth month) {
-		LocalDateTime startOfMonth = month.atDay(1).atStartOfDay();
-		LocalDateTime endOfMonth = month.atEndOfMonth().atTime(LocalTime.MAX);
-		List<DeviceEntity> entities = deviceEntityRepository.findByAssignmentEndBetween(startOfMonth, endOfMonth);
+		LocalDate startOfMonth = month.atDay(1);
+		LocalDate endOfMonth = month.atEndOfMonth();
+		List<DeviceEntity> entities = deviceEntityRepository.findByDateRange(startOfMonth, endOfMonth);
 
 		return entities.stream()
 				.map(DeviceEntity::toDevice)
