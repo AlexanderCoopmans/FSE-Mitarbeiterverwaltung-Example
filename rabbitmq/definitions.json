@@ -27,11 +27,27 @@
       "durable": true,
       "auto_delete": false,
       "arguments": { "x-queue-type": "classic" }
+    },
+    {
+      "name": "devices_all_returned",
+      "vhost": "rabbitmqhost",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": { "x-queue-type": "classic" }
     }
   ],
   "exchanges": [
     {
       "name": "lager.events",
+      "vhost": "rabbitmqhost",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "devices.events",
       "vhost": "rabbitmqhost",
       "type": "direct",
       "durable": true,
@@ -47,6 +63,14 @@
       "destination": "lagerqueue_einlagerung",
       "destination_type": "queue",
       "routing_key": "artikel.eingetroffen",
+      "arguments": {}
+    },
+    {
+      "source": "devices.events",
+      "vhost": "rabbitmqhost",
+      "destination": "devices_all_returned",
+      "destination_type": "queue",
+      "routing_key": "devices.returned",
       "arguments": {}
     }
   ]

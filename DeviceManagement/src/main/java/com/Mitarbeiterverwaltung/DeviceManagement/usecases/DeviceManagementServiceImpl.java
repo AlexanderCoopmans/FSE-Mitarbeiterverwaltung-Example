@@ -12,15 +12,20 @@ import com.Mitarbeiterverwaltung.DeviceManagement.domain.DeviceId;
 import com.Mitarbeiterverwaltung.DeviceManagement.domain.DeviceType;
 import com.Mitarbeiterverwaltung.DeviceManagement.domain.EmployeeReference;
 import com.Mitarbeiterverwaltung.DeviceManagement.domain.ValidityPeriod;
+import com.Mitarbeiterverwaltung.DeviceManagement.domain.events.AllDevicesReturnedEvent;
 import com.Mitarbeiterverwaltung.DeviceManagement.usecases.primary.DeviceManagementService;
+import com.Mitarbeiterverwaltung.DeviceManagement.usecases.secondary.AllDevicesReturnedEventPublisher;
 import com.Mitarbeiterverwaltung.DeviceManagement.usecases.secondary.DeviceRepository;
 
 public class DeviceManagementServiceImpl implements DeviceManagementService {
 
     private final DeviceRepository deviceRepository;
+    private AllDevicesReturnedEventPublisher allDevicesReturnedEventPublisher;
 
-    public DeviceManagementServiceImpl(DeviceRepository deviceRepository) {
+    public DeviceManagementServiceImpl(DeviceRepository deviceRepository,
+            AllDevicesReturnedEventPublisher allDevicesReturnedEventPublisher) {
         this.deviceRepository = deviceRepository;
+        this.allDevicesReturnedEventPublisher = allDevicesReturnedEventPublisher;
     }
 
     @Override
@@ -103,8 +108,20 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
             return false;
         }
         Device device = deviceOpt.get();
-        device.recordReturn(returnDate != null ? returnDate : LocalDate.now());
+        EmployeeReference employeeId = device.getCurrentAssignment() != null
+                ? device.getCurrentAssignment().getEmployee()
+                : null;
+        returnDate = returnDate != null ? returnDate : LocalDate.now();
+        device.recordReturn(returnDate);
         deviceRepository.save(device);
+        if (employeeId == null) {
+            return true;
+        }
+        List<Device> employeeAssignments = findAssignmentsByEmployee(employeeId.getEmployeeNumber());
+        if (employeeAssignments.isEmpty()) {
+            AllDevicesReturnedEvent event = new AllDevicesReturnedEvent(employeeId, LocalDate.now());
+            allDevicesReturnedEventPublisher.publishDomainEvent(event);
+        }
         return true;
     }
 
