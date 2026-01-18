@@ -15,6 +15,14 @@ public class DeviceAssignment {
         this.validityPeriod = validityPeriod;
     }
 
+    public DeviceAssignment(AssignmentId assignmentId, EmployeeReference employee, ValidityPeriod validityPeriod,
+            LocalDate returnedOn) {
+        this.assignmentId = assignmentId;
+        this.employee = employee;
+        this.validityPeriod = validityPeriod;
+        this.returnedOn = returnedOn;
+    }
+
     public AssignmentId getAssignmentId() {
         return assignmentId;
     }

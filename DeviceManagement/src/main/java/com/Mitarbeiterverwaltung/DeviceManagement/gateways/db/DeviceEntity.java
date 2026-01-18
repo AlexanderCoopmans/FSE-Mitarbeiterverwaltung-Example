@@ -51,7 +51,7 @@ public class DeviceEntity {
 		if (assignmentId != null) {
 			assignment = new DeviceAssignment(new AssignmentId(assignmentId),
 					new EmployeeReference(employeeNumber),
-					new ValidityPeriod(assignmentStart, assignmentEnd));
+					new ValidityPeriod(assignmentStart, assignmentEnd), returnedOn);
 		}
 		return new Device(new DeviceId(this.id), DeviceType.valueOf(this.deviceType), this.manufacturer,
 				this.designation, assignment);
