@@ -32,11 +32,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
-public class DeviceManagamentController {
+public class DeviceManagementController {
 
     private final DeviceManagementService deviceManagmentService;
 
-    public DeviceManagamentController(DeviceManagementService deviceManagmentService) {
+    public DeviceManagementController(DeviceManagementService deviceManagmentService) {
         this.deviceManagmentService = deviceManagmentService;
     }
 
