@@ -108,18 +108,19 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
             return false;
         }
         Device device = deviceOpt.get();
+        device.recordReturn();
+        deviceRepository.save(device);
         EmployeeReference employeeId = device.getCurrentAssignment() != null
                 ? device.getCurrentAssignment().getEmployee()
                 : null;
-        returnDate = returnDate != null ? returnDate : LocalDate.now();
-        device.recordReturn(returnDate);
-        deviceRepository.save(device);
+
         if (employeeId == null) {
             return true;
         }
         List<Device> employeeAssignments = findAssignmentsByEmployee(employeeId.getEmployeeNumber());
         if (employeeAssignments.isEmpty()) {
-            AllDevicesReturnedEvent event = new AllDevicesReturnedEvent(employeeId, LocalDate.now());
+            returnDate = returnDate != null ? returnDate : LocalDate.now();
+            AllDevicesReturnedEvent event = new AllDevicesReturnedEvent(employeeId, returnDate);
             allDevicesReturnedEventPublisher.publishDomainEvent(event);
         }
         return true;

@@ -56,8 +56,7 @@ public class Device {
         return assignment;
     }
 
-    public void recordReturn(LocalDate returnDate) {
-        Objects.requireNonNull(returnDate, "return date must not be null");
+    public void recordReturn() {
         currentAssignment = null;
     }
 
