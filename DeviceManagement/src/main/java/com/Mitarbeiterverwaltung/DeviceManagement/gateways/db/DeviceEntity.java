@@ -58,7 +58,8 @@ public class DeviceEntity {
 	public static DeviceEntity fromDevice(Device device) {
 		DeviceAssignment currentAssignment = device.getCurrentAssignment();
 		ValidityPeriod period = currentAssignment != null ? currentAssignment.getValidityPeriod() : null;
-		return new DeviceEntity(device.getDeviceId().getId(),
+		int entityId = device.getDeviceId().getId() > 0 ? device.getDeviceId().getId() : 0;
+		return new DeviceEntity(entityId,
 				device.getDeviceType().name(),
 				device.getManufacturer(),
 				device.getDesignation(),
