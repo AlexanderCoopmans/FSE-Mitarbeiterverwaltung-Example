@@ -9,8 +9,7 @@ CREATE TABLE device_entity (
   assignment_id VARCHAR(100),
   employee_number VARCHAR(50),
   assignment_start DATE,
-  assignment_end DATE,
-  returned_on DATE
+  assignment_end DATE
 );
 
 -- Unassigned device
@@ -22,5 +21,5 @@ INSERT INTO device_entity (id, device_type, manufacturer, designation, assignmen
 VALUES (2, 'SMARTPHONE', 'Apple', 'iPhone 14', 'A-1001', 'E1', '2025-01-01', '2026-12-31');
 
 -- Assigned device, already returned
-INSERT INTO device_entity (id, device_type, manufacturer, designation, assignment_id, employee_number, assignment_start, assignment_end, returned_on)
-VALUES (3, 'TABLET', 'Samsung', 'Galaxy Tab S9', 'A-1002', 'E2', '2024-01-01', '2026-01-31', '2024-11-15');
+INSERT INTO device_entity (id, device_type, manufacturer, designation, assignment_id, employee_number, assignment_start, assignment_end)
+VALUES (3, 'TABLET', 'Samsung', 'Galaxy Tab S9', 'A-1002', 'E2', '2024-01-01', '2026-01-31');

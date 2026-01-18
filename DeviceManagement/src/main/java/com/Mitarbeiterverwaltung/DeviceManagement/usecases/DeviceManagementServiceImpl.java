@@ -29,8 +29,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
     public List<String> assignmentsDueForReturn(YearMonth month) {
         YearMonth targetMonth = month != null ? month : YearMonth.now();
         return deviceRepository.findDevicesDueForReturnInMonth(targetMonth).stream()
-                .filter(device -> device.getCurrentAssignment() != null
-                        && !device.getCurrentAssignment().isReturned())
+                .filter(device -> device.getCurrentAssignment() != null)
                 .map(this::toReturnInformation)
                 .collect(Collectors.toList());
     }
@@ -48,9 +47,6 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
                     .append(assignment.getEmployee().getEmployeeNumber())
                     .append(" von ").append(assignment.getValidityPeriod().getStartDate())
                     .append(" bis ").append(assignment.getValidityPeriod().getEndDate());
-            if (assignment.isReturned()) {
-                builder.append(" (zurueckgegeben am ").append(assignment.getReturnedOn()).append(")");
-            }
         } else {
             builder.append(" | aktuell nicht zugewiesen");
         }

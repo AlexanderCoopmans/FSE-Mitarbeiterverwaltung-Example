@@ -58,14 +58,12 @@ public class Device {
 
     public void recordReturn(LocalDate returnDate) {
         Objects.requireNonNull(returnDate, "return date must not be null");
-        currentAssignment.markReturned(returnDate);
         currentAssignment = null;
     }
 
     public void enforceReturnBy(LocalDate deadline) {
         Objects.requireNonNull(deadline, "deadline must not be null");
-        if (currentAssignment != null
-                && !currentAssignment.isReturned()) {
+        if (currentAssignment != null) {
             currentAssignment.shortenValidityTo(deadline);
         }
     }
@@ -73,19 +71,17 @@ public class Device {
     public boolean isReturnDueInMonth(YearMonth month) {
         Objects.requireNonNull(month, "month must not be null");
         return currentAssignment != null
-                && !currentAssignment.isReturned()
                 && currentAssignment.getValidityPeriod().endsInMonth(month);
     }
 
     public boolean isAssignedTo(EmployeeReference employee) {
         Objects.requireNonNull(employee, "employee must not be null");
         return currentAssignment != null
-                && !currentAssignment.isReturned()
                 && currentAssignment.getEmployee().equals(employee);
     }
 
     private void ensureNoActiveAssignment() {
-        if (currentAssignment != null && !currentAssignment.isReturned()) {
+        if (currentAssignment != null) {
             throw new IllegalStateException("Device already has an active assignment");
         }
     }

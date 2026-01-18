@@ -28,13 +28,12 @@ public class DeviceEntity {
 	private String employeeNumber;
 	private LocalDate assignmentStart;
 	private LocalDate assignmentEnd;
-	private LocalDate returnedOn;
 
 	public DeviceEntity() {
 	}
 
 	public DeviceEntity(int id, String deviceType, String manufacturer, String designation, String assignmentId,
-			String employeeNumber, LocalDate assignmentStart, LocalDate assignmentEnd, LocalDate returnedOn) {
+			String employeeNumber, LocalDate assignmentStart, LocalDate assignmentEnd) {
 		this.id = id;
 		this.deviceType = deviceType;
 		this.manufacturer = manufacturer;
@@ -43,7 +42,6 @@ public class DeviceEntity {
 		this.employeeNumber = employeeNumber;
 		this.assignmentStart = assignmentStart;
 		this.assignmentEnd = assignmentEnd;
-		this.returnedOn = returnedOn;
 	}
 
 	public Device toDevice() {
@@ -51,7 +49,7 @@ public class DeviceEntity {
 		if (assignmentId != null) {
 			assignment = new DeviceAssignment(new AssignmentId(assignmentId),
 					new EmployeeReference(employeeNumber),
-					new ValidityPeriod(assignmentStart, assignmentEnd), returnedOn);
+					new ValidityPeriod(assignmentStart, assignmentEnd));
 		}
 		return new Device(new DeviceId(this.id), DeviceType.valueOf(this.deviceType), this.manufacturer,
 				this.designation, assignment);
@@ -69,10 +67,7 @@ public class DeviceEntity {
 				currentAssignment != null ? currentAssignment.getEmployee().getEmployeeNumber()
 						: null,
 				currentAssignment != null ? period.getStartDate() : null,
-				currentAssignment != null ? period.getEndDate() : null,
-				currentAssignment != null && currentAssignment.isReturned()
-						? currentAssignment.getReturnedOn()
-						: null);
+				currentAssignment != null ? period.getEndDate() : null);
 	}
 
 	public int getId() {
@@ -137,14 +132,6 @@ public class DeviceEntity {
 
 	public void setAssignmentEnd(LocalDate assignmentEnd) {
 		this.assignmentEnd = assignmentEnd;
-	}
-
-	public LocalDate getReturnedOn() {
-		return returnedOn;
-	}
-
-	public void setReturnedOn(LocalDate returnedOn) {
-		this.returnedOn = returnedOn;
 	}
 
 }
