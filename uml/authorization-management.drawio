@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="oPPMAmeGuMOg8BbmZ0UJ" name="Seite-1">
-        <mxGraphModel dx="2082" dy="657" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1953" dy="870" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -23,10 +23,10 @@
                     <mxGeometry y="40" width="170" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="17" value="&lt;div style=&quot;&quot;&gt;&amp;lt;&amp;lt;Value Object&amp;gt;&amp;gt;&lt;/div&gt;&lt;div style=&quot;font-weight: 700;&quot;&gt;ApplicationSystem&lt;/div&gt;" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;whiteSpace=wrap;" parent="1" vertex="1">
-                    <mxGeometry x="-700" y="580" width="170" height="80" as="geometry"/>
+                    <mxGeometry x="-700" y="580" width="170" height="70" as="geometry"/>
                 </mxCell>
-                <mxCell id="18" value="systemName:String&lt;div&gt;systemDescription:String&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;" parent="17" vertex="1">
-                    <mxGeometry y="40" width="170" height="40" as="geometry"/>
+                <mxCell id="18" value="systemName:String" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;" parent="17" vertex="1">
+                    <mxGeometry y="40" width="170" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="19" value="&lt;div style=&quot;&quot;&gt;&amp;lt;&amp;lt;Value Object&amp;gt;&amp;gt;&lt;/div&gt;&lt;div style=&quot;font-weight: 700;&quot;&gt;Role&lt;/div&gt;" style="swimlane;fontStyle=0;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;html=1;whiteSpace=wrap;" parent="1" vertex="1">
                     <mxGeometry x="-498.5" y="585" width="170" height="80" as="geometry"/>
