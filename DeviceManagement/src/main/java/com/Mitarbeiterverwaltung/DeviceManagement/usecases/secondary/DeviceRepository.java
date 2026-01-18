@@ -6,11 +6,20 @@ import java.util.Optional;
 
 import com.Mitarbeiterverwaltung.DeviceManagement.domain.Device;
 import com.Mitarbeiterverwaltung.DeviceManagement.domain.DeviceId;
+import com.Mitarbeiterverwaltung.DeviceManagement.domain.DeviceType;
 
 public interface DeviceRepository {
-    public Optional<Device> findDeviceById(DeviceId deviceId);
+    Optional<Device> findDeviceById(DeviceId deviceId);
 
-    public List<Device> findDevicesDueForReturnInMonth(YearMonth month);
+    List<Device> findAllDevices();
 
-    public void save(Device device);
+    List<Device> findDevicesDueForReturnInMonth(YearMonth month);
+
+    List<Device> findDevicesAssignedToEmployee(String employeeNumber);
+
+    Optional<Device> findByAssignmentId(String assignmentId);
+
+    Device save(Device device);
+
+    void delete(DeviceId deviceId);
 }

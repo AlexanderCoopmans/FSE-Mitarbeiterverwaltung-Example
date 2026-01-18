@@ -80,6 +80,13 @@ public class Device {
                 && currentAssignment.getEmployee().equals(employee);
     }
 
+    public Device withUpdatedDetails(DeviceType newType, String newManufacturer, String newDesignation) {
+        DeviceType targetType = newType != null ? newType : this.deviceType;
+        String targetManufacturer = newManufacturer != null ? newManufacturer : this.manufacturer;
+        String targetDesignation = newDesignation != null ? newDesignation : this.designation;
+        return new Device(this.deviceId, targetType, targetManufacturer, targetDesignation, this.currentAssignment);
+    }
+
     private void ensureNoActiveAssignment() {
         if (currentAssignment != null) {
             throw new IllegalStateException("Device already has an active assignment");

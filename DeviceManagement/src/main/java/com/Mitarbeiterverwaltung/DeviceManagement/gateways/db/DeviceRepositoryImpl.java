@@ -28,6 +28,13 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 	}
 
 	@Override
+	public List<Device> findAllDevices() {
+		return deviceEntityRepository.findAll().stream()
+				.map(DeviceEntity::toDevice)
+				.collect(Collectors.toList());
+	}
+
+	@Override
 	public List<Device> findDevicesDueForReturnInMonth(YearMonth month) {
 		LocalDate startOfMonth = month.atDay(1);
 		LocalDate endOfMonth = month.atEndOfMonth();
@@ -39,9 +46,29 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 	}
 
 	@Override
-	public void save(Device device) {
+	public List<Device> findDevicesAssignedToEmployee(String employeeNumber) {
+		LocalDate today = LocalDate.now();
+		return deviceEntityRepository.findActiveAssignmentsByEmployee(employeeNumber, today).stream()
+				.map(DeviceEntity::toDevice)
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public Optional<Device> findByAssignmentId(String assignmentId) {
+		DeviceEntity entity = deviceEntityRepository.findByAssignmentId(assignmentId);
+		return Optional.ofNullable(entity).map(DeviceEntity::toDevice);
+	}
+
+	@Override
+	public Device save(Device device) {
 		DeviceEntity deviceEntity = DeviceEntity.fromDevice(device);
-		deviceEntityRepository.save(deviceEntity);
+		DeviceEntity saved = deviceEntityRepository.save(deviceEntity);
+		return saved.toDevice();
+	}
+
+	@Override
+	public void delete(DeviceId deviceId) {
+		deviceEntityRepository.deleteById(deviceId.getId());
 	}
 
 }

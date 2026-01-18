@@ -7,7 +7,9 @@ public final class DeviceId {
 
     public DeviceId(int id) {
         this.id = id;
+    }
 
+    public DeviceId() {
     }
 
     public int getId() {

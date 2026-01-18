@@ -1,5 +1,6 @@
 package com.Mitarbeiterverwaltung.DeviceManagement.usecases;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +9,9 @@ import java.util.stream.Collectors;
 import com.Mitarbeiterverwaltung.DeviceManagement.domain.Device;
 import com.Mitarbeiterverwaltung.DeviceManagement.domain.DeviceAssignment;
 import com.Mitarbeiterverwaltung.DeviceManagement.domain.DeviceId;
+import com.Mitarbeiterverwaltung.DeviceManagement.domain.DeviceType;
+import com.Mitarbeiterverwaltung.DeviceManagement.domain.EmployeeReference;
+import com.Mitarbeiterverwaltung.DeviceManagement.domain.ValidityPeriod;
 import com.Mitarbeiterverwaltung.DeviceManagement.usecases.primary.DeviceManagementService;
 import com.Mitarbeiterverwaltung.DeviceManagement.usecases.secondary.DeviceRepository;
 
@@ -34,7 +38,78 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
                 .collect(Collectors.toList());
     }
 
-    private String toReadableInformation(Device device) {
+    @Override
+    public List<Device> listDevices() {
+        return deviceRepository.findAllDevices();
+    }
+
+    @Override
+    public Optional<Device> createDevice(DeviceType deviceType, String manufacturer, String designation) {
+        if (deviceType == null || manufacturer == null || manufacturer.isBlank() || designation == null
+                || designation.isBlank()) {
+            return Optional.empty();
+        }
+        Device device = new Device(new DeviceId(), deviceType, manufacturer.trim(), designation.trim());
+        Device saved = deviceRepository.save(device);
+        return Optional.ofNullable(saved);
+    }
+
+    @Override
+    public Optional<Device> updateDevice(int id, DeviceType deviceType, String manufacturer, String designation) {
+        Optional<Device> current = deviceRepository.findDeviceById(new DeviceId(id));
+        if (current.isEmpty()) {
+            return Optional.empty();
+        }
+        Device updated = current.get().withUpdatedDetails(deviceType,
+                manufacturer != null ? manufacturer.trim() : null,
+                designation != null ? designation.trim() : null);
+        Device saved = deviceRepository.save(updated);
+        return Optional.of(saved);
+    }
+
+    @Override
+    public boolean deleteDevice(int id) {
+        Optional<Device> current = deviceRepository.findDeviceById(new DeviceId(id));
+        if (current.isEmpty()) {
+            return false;
+        }
+        deviceRepository.delete(new DeviceId(id));
+        return true;
+    }
+
+    @Override
+    public Optional<Device> assignDevice(int deviceId, String employeeId, LocalDate startDate,
+            LocalDate endDate) {
+        Optional<Device> deviceOpt = deviceRepository.findDeviceById(new DeviceId(deviceId));
+        if (deviceOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        Device device = deviceOpt.get();
+        ValidityPeriod period = new ValidityPeriod(startDate, endDate);
+        device.assignToEmployee(new EmployeeReference(employeeId), period);
+        Device saved = deviceRepository.save(device);
+        return Optional.ofNullable(saved);
+    }
+
+    @Override
+    public List<Device> findAssignmentsByEmployee(String employeeId) {
+        return deviceRepository.findDevicesAssignedToEmployee(employeeId);
+    }
+
+    @Override
+    public boolean recordReturn(int deviceId, LocalDate returnDate) {
+        Optional<Device> deviceOpt = deviceRepository.findDeviceById(new DeviceId(deviceId));
+        if (deviceOpt.isEmpty()) {
+            return false;
+        }
+        Device device = deviceOpt.get();
+        device.recordReturn(returnDate != null ? returnDate : LocalDate.now());
+        deviceRepository.save(device);
+        return true;
+    }
+
+    @Override
+    public String toReadableInformation(Device device) {
         StringBuilder builder = new StringBuilder();
         builder.append("Device ").append(device.getDeviceId().getId())
                 .append(": ").append(device.getDeviceType())
@@ -53,7 +128,8 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
         return builder.toString();
     }
 
-    private String toReturnInformation(Device device) {
+    @Override
+    public String toReturnInformation(Device device) {
         DeviceAssignment assignment = device.getCurrentAssignment();
         StringBuilder builder = new StringBuilder();
         builder.append("Device ").append(device.getDeviceId().getId());
