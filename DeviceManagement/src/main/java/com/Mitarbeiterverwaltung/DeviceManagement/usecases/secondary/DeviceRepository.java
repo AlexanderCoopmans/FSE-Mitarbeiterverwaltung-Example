@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import com.Mitarbeiterverwaltung.DeviceManagement.domain.Device;
 import com.Mitarbeiterverwaltung.DeviceManagement.domain.DeviceId;
-import com.Mitarbeiterverwaltung.DeviceManagement.domain.DeviceType;
 
 public interface DeviceRepository {
     Optional<Device> findDeviceById(DeviceId deviceId);

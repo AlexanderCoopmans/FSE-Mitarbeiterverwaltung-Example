@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.Mitarbeiterverwaltung.DeviceManagement.domain.Device;
-import com.Mitarbeiterverwaltung.DeviceManagement.domain.DeviceAssignment;
 import com.Mitarbeiterverwaltung.DeviceManagement.domain.DeviceType;
 
 public interface DeviceManagementService {
