@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 import com.Mitarbeiterverwaltung.AuthorizationManagement.domain.ApplicationSystem;
 import com.Mitarbeiterverwaltung.AuthorizationManagement.domain.EmployeeReference;
 import com.Mitarbeiterverwaltung.AuthorizationManagement.domain.PermissionId;
@@ -40,6 +42,7 @@ public class PermissionController {
     }
 
     @GetMapping("/permissions")
+    @Operation(summary = "Berechtigungshistorie abrufen", description = "Liefert eine Liste aller aktuellen und vergangenen Berechtigungen eines Mitarbeiters anhand der Mitarbeiter-ID.")
     public ResponseEntity<List<String>> permissionsByEmployee(@RequestParam(name = "employeeId", required = true) Integer employeeId) {
         if (employeeId == null || employeeId <= 0) {
             return ResponseEntity.badRequest().body(List.of("employeeId is required"));
@@ -51,6 +54,7 @@ public class PermissionController {
     }
 
     @PostMapping("/permissions")
+    @Operation(summary = "Neue Berechtigung erteilen", description = "Legt einen neuen Berechtigungseintrag fuer ein Anwendungssystem und eine Rolle an.")
     public ResponseEntity<String> grantPermission(@RequestBody PermissionCreateRequest request) {
         if (request == null || request.getEmployeeId() <= 0 || isBlank(request.getSystem()) || isBlank(request.getRole())
                 || request.getValidFrom() == null || request.getValidTo() == null) {
@@ -76,6 +80,7 @@ public class PermissionController {
     }
 
     @PutMapping("/permissions/{id}")
+    @Operation(summary = "Berechtigung bearbeiten", description = "Aktualisiert eine bestehende Berechtigung, z.B. zur Verlaengerung des Zeitraums oder Aenderung der Rolle.")
     public ResponseEntity<String> updatePermission(@PathVariable("id") String id,
             @RequestBody PermissionUpdateRequest request) {
         PermissionId permissionId;
@@ -104,6 +109,7 @@ public class PermissionController {
     }
 
     @DeleteMapping("/permissions/{id}")
+    @Operation(summary = "Berechtigung entziehen", description = "Entfernt eine Berechtigung oder markiert sie sofort als ungueltig.")
     public ResponseEntity<String> revokePermission(@PathVariable("id") String id) {
         PermissionId permissionId;
         try {
@@ -120,6 +126,7 @@ public class PermissionController {
     }
 
     @PostMapping("/permissions/actions/terminate")
+    @Operation(summary = "Alle Berechtigungen beenden (Kuendigung)", description = "Setzt das Enddatum aller aktiven Berechtigungen auf den angegebenen Stichtag. Wird vom HR-Service bei Vertragsende aufgerufen.")
     public ResponseEntity<String> terminatePermissions(@RequestBody TerminationRequest request) {
         if (request == null || request.getEmployeeId() <= 0 || request.getTerminationDate() == null) {
             return ResponseEntity.badRequest().body("Missing or invalid fields: employeeId, terminationDate");
@@ -130,6 +137,7 @@ public class PermissionController {
     }
 
     @GetMapping("/permissions/status/offboarding")
+    @Operation(summary = "Offboarding-Status pruefen", description = "Prueft fuer HR, ob alle Berechtigungen erfolgreich entzogen wurden und wann der letzte Entzug stattfand.")
     public ResponseEntity<OffboardingStatusResponse> offboardingStatus(
             @RequestParam(name = "employeeId", required = true) Integer employeeId) {
         if (employeeId == null || employeeId <= 0) {
