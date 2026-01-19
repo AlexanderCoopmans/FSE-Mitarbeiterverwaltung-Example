@@ -31,4 +31,6 @@ public interface DeviceManagementService {
     String toReadableInformation(Device device);
 
     String toReturnInformation(Device device);
+
+    void handleEmploymentTermination(int employeeId, LocalDate terminationDate);
 }

@@ -165,4 +165,13 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
         }
         return builder.toString();
     }
+
+    @Override
+    public void handleEmploymentTermination(int employeeId, LocalDate terminationDate) {
+        List<Device> assignedDevices = findAssignmentsByEmployee(employeeId);
+        for (Device device : assignedDevices) {
+            device.getCurrentAssignment().shortenValidityTo(terminationDate);
+            deviceRepository.save(device);
+        }
+    }
 }
