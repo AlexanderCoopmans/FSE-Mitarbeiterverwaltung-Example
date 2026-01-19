@@ -80,6 +80,8 @@ services:
     build: ./DBs/AuthorizationManagement
     image: imageauthorizationmanagementdb
     container_name: containerauthorizationmanagementdb
+    volumes:
+      - authorizationmanagementdata:/var/lib/mysql
     ports:
       - 3309:3306
     environment:
@@ -105,4 +107,5 @@ services:
 volumes:
   hrmanagementdata:
   devicemanagementdata:
+  authorizationmanagementdata:
   rabbitmqdata:
