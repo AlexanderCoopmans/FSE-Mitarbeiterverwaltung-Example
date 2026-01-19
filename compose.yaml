@@ -107,4 +107,5 @@ services:
 volumes:
   hrmanagementdata:
   devicemanagementdata:
+  authorizationmanagementdata:
   rabbitmqdata:
