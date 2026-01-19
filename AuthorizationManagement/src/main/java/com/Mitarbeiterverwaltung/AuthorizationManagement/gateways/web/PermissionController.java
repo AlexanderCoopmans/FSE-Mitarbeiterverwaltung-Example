@@ -1,0 +1,146 @@
+package com.Mitarbeiterverwaltung.AuthorizationManagement.gateways.web;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.Mitarbeiterverwaltung.AuthorizationManagement.domain.ApplicationSystem;
+import com.Mitarbeiterverwaltung.AuthorizationManagement.domain.EmployeeReference;
+import com.Mitarbeiterverwaltung.AuthorizationManagement.domain.PermissionId;
+import com.Mitarbeiterverwaltung.AuthorizationManagement.domain.Role;
+import com.Mitarbeiterverwaltung.AuthorizationManagement.domain.SystemPermission;
+import com.Mitarbeiterverwaltung.AuthorizationManagement.domain.ValidityPeriod;
+import com.Mitarbeiterverwaltung.AuthorizationManagement.gateways.web.dto.OffboardingStatusResponse;
+import com.Mitarbeiterverwaltung.AuthorizationManagement.gateways.web.dto.PermissionCreateRequest;
+import com.Mitarbeiterverwaltung.AuthorizationManagement.gateways.web.dto.PermissionUpdateRequest;
+import com.Mitarbeiterverwaltung.AuthorizationManagement.gateways.web.dto.TerminationRequest;
+import com.Mitarbeiterverwaltung.AuthorizationManagement.usecases.primary.OffboardingStatus;
+import com.Mitarbeiterverwaltung.AuthorizationManagement.usecases.primary.PermissionManagementService;
+
+@RestController
+public class PermissionController {
+
+    private final PermissionManagementService permissionManagementService;
+
+    public PermissionController(PermissionManagementService permissionManagementService) {
+        this.permissionManagementService = permissionManagementService;
+    }
+
+    @GetMapping("/permissions")
+    public ResponseEntity<List<String>> permissionsByEmployee(@RequestParam(name = "employeeId", required = true) Integer employeeId) {
+        if (employeeId == null || employeeId <= 0) {
+            return ResponseEntity.badRequest().body(List.of("employeeId is required"));
+        }
+        List<String> permissions = permissionManagementService.getPermissionHistory(employeeId).stream()
+                .map(permissionManagementService::toReadableInformation)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(permissions);
+    }
+
+    @PostMapping("/permissions")
+    public ResponseEntity<String> grantPermission(@RequestBody PermissionCreateRequest request) {
+        if (request == null || request.getEmployeeId() <= 0 || isBlank(request.getSystem()) || isBlank(request.getRole())
+                || request.getValidFrom() == null || request.getValidTo() == null) {
+            return ResponseEntity.badRequest().body("Missing or invalid fields: employeeId, system, role, validFrom, validTo");
+        }
+
+        ValidityPeriod validityPeriod;
+        try {
+            validityPeriod = new ValidityPeriod(request.getValidFrom(), request.getValidTo());
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+
+        ApplicationSystem system = new ApplicationSystem(request.getSystem());
+        Role role = new Role(request.getRole());
+        EmployeeReference employee = new EmployeeReference(request.getEmployeeId());
+
+        Optional<SystemPermission> created = permissionManagementService.grantPermission(employee, system, role,
+                validityPeriod);
+        return created.map(permissionManagementService::toReadableInformation)
+                .map(body -> ResponseEntity.status(HttpStatus.CREATED).body(body))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Permission could not be created"));
+    }
+
+    @PutMapping("/permissions/{id}")
+    public ResponseEntity<String> updatePermission(@PathVariable("id") String id,
+            @RequestBody PermissionUpdateRequest request) {
+        PermissionId permissionId;
+        try {
+            permissionId = PermissionId.of(UUID.fromString(id));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body("Invalid permission id");
+        }
+
+        Role newRole = null;
+        if (request != null && !isBlank(request.getRole())) {
+            newRole = new Role(request.getRole());
+        }
+
+        Optional<SystemPermission> updated;
+        try {
+            updated = permissionManagementService.updatePermission(permissionId, newRole,
+                    request != null ? request.getValidTo() : null);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+
+        return updated.map(permissionManagementService::toReadableInformation)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Permission not found"));
+    }
+
+    @DeleteMapping("/permissions/{id}")
+    public ResponseEntity<String> revokePermission(@PathVariable("id") String id) {
+        PermissionId permissionId;
+        try {
+            permissionId = PermissionId.of(UUID.fromString(id));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body("Invalid permission id");
+        }
+
+        boolean revoked = permissionManagementService.revokePermission(permissionId);
+        if (!revoked) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Permission not found");
+        }
+        return ResponseEntity.ok("Permission revoked");
+    }
+
+    @PostMapping("/permissions/actions/terminate")
+    public ResponseEntity<String> terminatePermissions(@RequestBody TerminationRequest request) {
+        if (request == null || request.getEmployeeId() <= 0 || request.getTerminationDate() == null) {
+            return ResponseEntity.badRequest().body("Missing or invalid fields: employeeId, terminationDate");
+        }
+
+        permissionManagementService.terminateEmployeePermissions(request.getEmployeeId(), request.getTerminationDate());
+        return ResponseEntity.ok("Permissions aligned to termination date");
+    }
+
+    @GetMapping("/permissions/status/offboarding")
+    public ResponseEntity<OffboardingStatusResponse> offboardingStatus(
+            @RequestParam(name = "employeeId", required = true) Integer employeeId) {
+        if (employeeId == null || employeeId <= 0) {
+            return ResponseEntity.badRequest().build();
+        }
+        OffboardingStatus status = permissionManagementService.checkOffboardingStatus(employeeId);
+        OffboardingStatusResponse response = new OffboardingStatusResponse(status.allRevoked(), status.lastRevokedAt());
+        return ResponseEntity.ok(response);
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.isBlank();
+    }
+}

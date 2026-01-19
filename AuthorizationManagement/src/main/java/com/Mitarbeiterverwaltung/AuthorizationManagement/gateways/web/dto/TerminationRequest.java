@@ -1,18 +1,10 @@
-package com.Mitarbeiterverwaltung.AuthorizationManagement.gateways.messagequeue;
+package com.Mitarbeiterverwaltung.AuthorizationManagement.gateways.web.dto;
 
 import java.time.LocalDate;
 
-public class EmploymentTerminatedTO {
-    int employeeId;
-    LocalDate terminationDate;
-
-    public EmploymentTerminatedTO() {
-    }
-
-    EmploymentTerminatedTO(int employeeId, LocalDate terminationDate) {
-        this.employeeId = employeeId;
-        this.terminationDate = terminationDate;
-    }
+public class TerminationRequest {
+    private int employeeId;
+    private LocalDate terminationDate;
 
     public int getEmployeeId() {
         return employeeId;

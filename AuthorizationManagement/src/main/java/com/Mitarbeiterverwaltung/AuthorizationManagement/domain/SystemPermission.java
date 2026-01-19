@@ -8,7 +8,7 @@ public final class SystemPermission {
     private final PermissionId permissionId;
     private final EmployeeReference employeeReference;
     private final ApplicationSystem applicationSystem;
-    private final Role role;
+    private Role role;
     private ValidityPeriod validityPeriod;
     private boolean revoked;
 
@@ -32,6 +32,15 @@ public final class SystemPermission {
                                          Role role,
                                          ValidityPeriod validityPeriod) {
         return new SystemPermission(permissionId, employeeReference, applicationSystem, role, validityPeriod, false);
+    }
+
+    public static SystemPermission restore(PermissionId permissionId,
+                                           EmployeeReference employeeReference,
+                                           ApplicationSystem applicationSystem,
+                                           Role role,
+                                           ValidityPeriod validityPeriod,
+                                           boolean revoked) {
+        return new SystemPermission(permissionId, employeeReference, applicationSystem, role, validityPeriod, revoked);
     }
 
     public PermissionId getPermissionId() {
@@ -67,6 +76,18 @@ public final class SystemPermission {
         Objects.requireNonNull(endDate, "endDate");
         this.validityPeriod = this.validityPeriod.shortenTo(endDate);
         this.revoked = true;
+    }
+
+    public void update(Role newRole, LocalDate newValidUntil) {
+        if (newRole != null) {
+            this.role = Objects.requireNonNull(newRole, "role");
+        }
+        if (newValidUntil != null) {
+            this.validityPeriod = new ValidityPeriod(this.validityPeriod.getValidFrom(), newValidUntil);
+            if (newValidUntil.isAfter(LocalDate.now())) {
+                this.revoked = false;
+            }
+        }
     }
 
     public void alignToContractEnd(LocalDate contractEndDate) {
