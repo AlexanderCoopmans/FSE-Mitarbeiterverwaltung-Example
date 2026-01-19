@@ -78,6 +78,10 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
         if (current.isEmpty()) {
             return false;
         }
+        Device device = current.get();
+        if (device.getCurrentAssignment() != null) {
+            recordReturn(id, null);
+        }
         deviceRepository.delete(new DeviceId(id));
         return true;
     }
