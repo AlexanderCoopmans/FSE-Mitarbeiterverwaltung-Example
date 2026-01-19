@@ -125,7 +125,7 @@ public class DeviceManagementController {
     @Operation(summary = "Device zuordnen", description = "Ordnet einem Mitarbeiter ein Device fuer einen Zeitraum zu")
     @PostMapping("/assignments")
     public ResponseEntity<String> assignDevice(@RequestBody AssignRequest request) {
-        if (request.getDeviceId() <= 0 || isBlank(request.getEmployeeId()) || request.getStartDate() == null) {
+        if (request.getDeviceId() <= 0 || request.getEmployeeId() <= 0 || request.getStartDate() == null) {
             return ResponseEntity.badRequest()
                     .body("Pflichtfelder fehlen oder sind ungueltig: deviceId, employeeId, startDate");
         }
@@ -142,7 +142,7 @@ public class DeviceManagementController {
 
     @Operation(summary = "Aktive Zuweisungen eines Mitarbeiters", description = "Listet alle aktuell ausgeliehenen Devices einer Person")
     @GetMapping("/assignments/{employeeId}")
-    public ResponseEntity<List<String>> assignmentsByEmployee(@PathVariable("employeeId") String employeeId) {
+    public ResponseEntity<List<String>> assignmentsByEmployee(@PathVariable("employeeId") int employeeId) {
         List<String> devices = deviceManagmentService.findAssignmentsByEmployee(employeeId).stream()
                 .map(deviceManagmentService::toReadableInformation)
                 .collect(Collectors.toList());

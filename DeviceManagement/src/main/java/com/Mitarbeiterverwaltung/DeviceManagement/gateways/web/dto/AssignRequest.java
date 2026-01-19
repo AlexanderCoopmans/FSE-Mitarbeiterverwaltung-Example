@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class AssignRequest {
     private int deviceId;
-    private String employeeId;
+    private int employeeId;
     private LocalDate startDate;
     private LocalDate plannedReturnDate;
 
@@ -16,11 +16,11 @@ public class AssignRequest {
         this.deviceId = deviceId;
     }
 
-    public String getEmployeeId() {
+    public int getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(String employeeId) {
+    public void setEmployeeId(int employeeId) {
         this.employeeId = employeeId;
     }
 

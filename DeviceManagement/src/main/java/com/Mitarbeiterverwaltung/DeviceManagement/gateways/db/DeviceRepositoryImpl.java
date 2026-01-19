@@ -46,7 +46,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 	}
 
 	@Override
-	public List<Device> findDevicesAssignedToEmployee(String employeeNumber) {
+	public List<Device> findDevicesAssignedToEmployee(int employeeNumber) {
 		LocalDate today = LocalDate.now();
 		return deviceEntityRepository.findActiveAssignmentsByEmployee(employeeNumber, today).stream()
 				.map(DeviceEntity::toDevice)

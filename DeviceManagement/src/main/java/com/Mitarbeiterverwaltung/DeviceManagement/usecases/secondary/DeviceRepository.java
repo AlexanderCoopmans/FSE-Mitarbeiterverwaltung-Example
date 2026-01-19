@@ -14,7 +14,7 @@ public interface DeviceRepository {
 
     List<Device> findDevicesDueForReturnInMonth(YearMonth month);
 
-    List<Device> findDevicesAssignedToEmployee(String employeeNumber);
+    List<Device> findDevicesAssignedToEmployee(int employeeNumber);
 
     Optional<Device> findByAssignmentId(String assignmentId);
 

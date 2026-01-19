@@ -22,9 +22,9 @@ public interface DeviceManagementService {
 
     boolean deleteDevice(int id);
 
-    Optional<Device> assignDevice(int deviceId, String employeeId, LocalDate startDate, LocalDate endDate);
+    Optional<Device> assignDevice(int deviceId, int employeeId, LocalDate startDate, LocalDate endDate);
 
-    List<Device> findAssignmentsByEmployee(String employeeId);
+    List<Device> findAssignmentsByEmployee(int employeeId);
 
     boolean recordReturn(int deviceId, LocalDate returnDate);
 

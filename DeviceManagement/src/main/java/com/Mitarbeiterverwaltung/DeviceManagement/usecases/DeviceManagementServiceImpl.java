@@ -87,7 +87,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
     }
 
     @Override
-    public Optional<Device> assignDevice(int deviceId, String employeeId, LocalDate startDate,
+    public Optional<Device> assignDevice(int deviceId, int employeeId, LocalDate startDate,
             LocalDate endDate) {
         Optional<Device> deviceOpt = deviceRepository.findDeviceById(new DeviceId(deviceId));
         if (deviceOpt.isEmpty()) {
@@ -101,7 +101,7 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
     }
 
     @Override
-    public List<Device> findAssignmentsByEmployee(String employeeId) {
+    public List<Device> findAssignmentsByEmployee(int employeeId) {
         return deviceRepository.findDevicesAssignedToEmployee(employeeId);
     }
 
@@ -112,9 +112,10 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
             return false;
         }
         Device device = deviceOpt.get();
-        EmployeeReference employeeId = device.getCurrentAssignment() != null
-                ? device.getCurrentAssignment().getEmployee()
-                : null;
+        if (device.getCurrentAssignment() == null) {
+            return false;
+        }
+        EmployeeReference employeeId = device.getCurrentAssignment().getEmployee();
         device.recordReturn();
         deviceRepository.save(device);
         if (employeeId == null) {

@@ -3,19 +3,19 @@ package com.Mitarbeiterverwaltung.DeviceManagement.gateways.messagequeue;
 import java.time.LocalDate;
 
 public class AllDevicesReturnedTO {
-    String employeeId;
+    int employeeId;
     LocalDate lastReturnDate;
 
-    AllDevicesReturnedTO(String employeeId, LocalDate lastReturnDate) {
+    AllDevicesReturnedTO(int employeeId, LocalDate lastReturnDate) {
         this.employeeId = employeeId;
         this.lastReturnDate = lastReturnDate;
     }
 
-    public String getEmployeeId() {
+    public int getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(String employeeId) {
+    public void setEmployeeId(int employeeId) {
         this.employeeId = employeeId;
     }
 

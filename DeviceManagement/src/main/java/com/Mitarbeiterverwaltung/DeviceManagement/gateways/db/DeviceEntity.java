@@ -25,7 +25,7 @@ public class DeviceEntity {
 	private String manufacturer;
 	private String designation;
 	private String assignmentId;
-	private String employeeNumber;
+	private Integer employeeNumber;
 	private LocalDate assignmentStart;
 	private LocalDate assignmentEnd;
 
@@ -33,7 +33,7 @@ public class DeviceEntity {
 	}
 
 	public DeviceEntity(int id, String deviceType, String manufacturer, String designation, String assignmentId,
-			String employeeNumber, LocalDate assignmentStart, LocalDate assignmentEnd) {
+			Integer employeeNumber, LocalDate assignmentStart, LocalDate assignmentEnd) {
 		this.id = id;
 		this.deviceType = deviceType;
 		this.manufacturer = manufacturer;
@@ -46,7 +46,7 @@ public class DeviceEntity {
 
 	public Device toDevice() {
 		DeviceAssignment assignment = null;
-		if (assignmentId != null) {
+		if (assignmentId != null && employeeNumber != null) {
 			assignment = new DeviceAssignment(new AssignmentId(assignmentId),
 					new EmployeeReference(employeeNumber),
 					new ValidityPeriod(assignmentStart, assignmentEnd));
@@ -111,11 +111,11 @@ public class DeviceEntity {
 		this.assignmentId = assignmentId;
 	}
 
-	public String getEmployeeNumber() {
+	public Integer getEmployeeNumber() {
 		return employeeNumber;
 	}
 
-	public void setEmployeeNumber(String employeeNumber) {
+	public void setEmployeeNumber(Integer employeeNumber) {
 		this.employeeNumber = employeeNumber;
 	}
 

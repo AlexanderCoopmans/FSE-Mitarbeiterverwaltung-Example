@@ -11,7 +11,7 @@ public interface DeviceEntityRepository extends JpaRepository<DeviceEntity, Inte
     List<DeviceEntity> findByDateRange(LocalDate start, LocalDate end);
 
     @Query("SELECT d FROM DeviceEntity d WHERE d.employeeNumber = :employeeNumber AND d.assignmentStart IS NOT NULL AND (d.assignmentEnd IS NULL OR d.assignmentEnd >= :today)")
-    List<DeviceEntity> findActiveAssignmentsByEmployee(String employeeNumber, LocalDate today);
+    List<DeviceEntity> findActiveAssignmentsByEmployee(int employeeNumber, LocalDate today);
 
     DeviceEntity findByAssignmentId(String assignmentId);
 }

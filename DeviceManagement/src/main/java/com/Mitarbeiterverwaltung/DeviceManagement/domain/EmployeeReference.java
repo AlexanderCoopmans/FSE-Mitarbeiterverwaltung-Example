@@ -3,16 +3,13 @@ package com.Mitarbeiterverwaltung.DeviceManagement.domain;
 import java.util.Objects;
 
 public final class EmployeeReference {
-    private final String employeeNumber;
+    private final int employeeNumber;
 
-    public EmployeeReference(String employeeNumber) {
-        if (employeeNumber == null || employeeNumber.isBlank()) {
-            throw new IllegalArgumentException("Employee reference must not be null or blank");
-        }
-        this.employeeNumber = employeeNumber.trim();
+    public EmployeeReference(int employeeNumber) {
+        this.employeeNumber = employeeNumber;
     }
 
-    public String getEmployeeNumber() {
+    public int getEmployeeNumber() {
         return employeeNumber;
     }
 
@@ -25,7 +22,7 @@ public final class EmployeeReference {
             return false;
         }
         EmployeeReference that = (EmployeeReference) o;
-        return employeeNumber.equals(that.employeeNumber);
+        return employeeNumber == that.employeeNumber;
     }
 
     @Override
@@ -35,6 +32,6 @@ public final class EmployeeReference {
 
     @Override
     public String toString() {
-        return employeeNumber;
+        return Integer.toString(employeeNumber);
     }
 }
