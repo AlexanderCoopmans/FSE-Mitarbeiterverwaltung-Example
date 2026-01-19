@@ -4,13 +4,13 @@ import java.util.Objects;
 
 public final class EmployeeReference {
 
-    private final String employeeNumber;
+    private final int employeeNumber;
 
-    public EmployeeReference(String employeeNumber) {
-        this.employeeNumber = requireText(employeeNumber, "employeeNumber");
+    public EmployeeReference(int employeeNumber) {
+        this.employeeNumber = employeeNumber;
     }
 
-    public String getEmployeeNumber() {
+    public int getEmployeeNumber() {
         return employeeNumber;
     }
 
@@ -19,29 +19,20 @@ public final class EmployeeReference {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof EmployeeReference)) {
             return false;
         }
         EmployeeReference that = (EmployeeReference) o;
-        return employeeNumber.equals(that.employeeNumber);
+        return employeeNumber == that.employeeNumber;
     }
 
     @Override
     public int hashCode() {
-        return employeeNumber.hashCode();
+        return Objects.hash(employeeNumber);
     }
 
     @Override
     public String toString() {
-        return employeeNumber;
-    }
-
-    private static String requireText(String value, String fieldName) {
-        Objects.requireNonNull(value, fieldName);
-        String trimmed = value.trim();
-        if (trimmed.isEmpty()) {
-            throw new IllegalArgumentException(fieldName + " must not be blank");
-        }
-        return trimmed;
+        return Integer.toString(employeeNumber);
     }
 }
