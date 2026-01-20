@@ -30,7 +30,7 @@ VALUES (1, 'Anna', 'Schmidt', 'Hauptstrasse', '12A', '10115', 'Berlin', 'Deutsch
 
 -- Kuendigung eingereicht, Offboarding laeuft
 INSERT INTO employee_entity (id, firstName, lastName, street, houseNumber, postalCode, city, country, iban, bic, accountHolder,
-  termination_date, termination_reason, termination_status, system_permissions_revoked, system_permissions_revoked_at, devices_returned, devices_returned_at)
+  terminationDate, terminationReason, terminationStatus, systemPermissionsRevoked, systemPermissionsRevokedAt, devicesReturned, devicesReturnedAt)
 VALUES (2, 'Markus', 'Weber', 'Bahnhofstrasse', '5', '80331', 'Muenchen', 'Deutschland', 'DE21500500009876543210', 'COBADEFFXXX', 'Markus Weber',
   '2026-03-31', 'Wechsel des Arbeitgebers', 'IN_PROGRESS', FALSE, NULL, FALSE, NULL);
 
