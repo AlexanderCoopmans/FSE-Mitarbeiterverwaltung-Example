@@ -41,6 +41,18 @@ public final class TerminationProcessInformation {
                 null);
     }
 
+    public static TerminationProcessInformation restore(LocalDate terminationDate,
+            String terminationReason,
+            TerminationStatus status,
+            boolean statusSystemPermissionsRevoked,
+            LocalDateTime lastSystemPermissionRevokedAt,
+            boolean statusDevicesReturned,
+            LocalDateTime lastDevicesReturnedAt) {
+        return new TerminationProcessInformation(terminationDate, terminationReason, status,
+                statusSystemPermissionsRevoked, lastSystemPermissionRevokedAt,
+                statusDevicesReturned, lastDevicesReturnedAt);
+    }
+
     public TerminationProcessInformation markSystemPermissionsRevoked(LocalDateTime revokedAt) {
         LocalDateTime timestamp = requireNonNull(revokedAt, "revokedAt");
         boolean permissionsRevoked = true;

@@ -35,6 +35,15 @@ public class Employee {
         return new Employee(employeeNumber, name, address, bankAccount, employmentContract, null);
     }
 
+    public static Employee restore(EmployeeNumber employeeNumber,
+                                   Name name,
+                                   Address address,
+                                   BankAccount bankAccount,
+                                   EmploymentContract employmentContract,
+                                   TerminationProcessInformation terminationProcessInformation) {
+        return new Employee(employeeNumber, name, address, bankAccount, employmentContract, terminationProcessInformation);
+    }
+
     public void changeAddress(Address newAddress) {
         this.address = requireNonNull(newAddress, "address");
     }
@@ -93,6 +102,10 @@ public class Employee {
 
     public Optional<TerminationProcessInformation> getTerminationProcessInformation() {
         return Optional.ofNullable(terminationProcessInformation);
+    }
+
+    public Employee withEmploymentContract(EmploymentContract newContract) {
+        return new Employee(employeeNumber, name, address, bankAccount, requireNonNull(newContract, "employmentContract"), terminationProcessInformation);
     }
 
     @Override
