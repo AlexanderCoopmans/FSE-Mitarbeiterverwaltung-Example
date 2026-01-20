@@ -19,7 +19,7 @@ public class AllDevicesReturnedEventPublisherImpl implements AllDevicesReturnedE
     public String publishDomainEvent(AllDevicesReturnedEvent event) {
         AllDevicesReturnedTO payloadBody = new AllDevicesReturnedTO(
                 event.getEmployeeReference().getEmployeeNumber(),
-                event.getlastReturnDate());
+                event.getLastReturnDate());
 
         String payload = null;
         try {

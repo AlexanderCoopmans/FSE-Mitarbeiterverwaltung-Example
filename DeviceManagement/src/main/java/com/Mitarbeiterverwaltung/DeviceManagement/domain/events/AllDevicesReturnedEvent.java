@@ -17,7 +17,7 @@ public class AllDevicesReturnedEvent {
         return employeeReference;
     }
 
-    public LocalDate getlastReturnDate() {
+    public LocalDate getLastReturnDate() {
         return lastReturnDate;
     }
 
