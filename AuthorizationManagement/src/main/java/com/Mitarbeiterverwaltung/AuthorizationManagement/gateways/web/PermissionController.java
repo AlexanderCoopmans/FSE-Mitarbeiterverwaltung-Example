@@ -25,11 +25,9 @@ import com.Mitarbeiterverwaltung.AuthorizationManagement.domain.PermissionId;
 import com.Mitarbeiterverwaltung.AuthorizationManagement.domain.Role;
 import com.Mitarbeiterverwaltung.AuthorizationManagement.domain.SystemPermission;
 import com.Mitarbeiterverwaltung.AuthorizationManagement.domain.ValidityPeriod;
-import com.Mitarbeiterverwaltung.AuthorizationManagement.gateways.web.dto.OffboardingStatusResponse;
 import com.Mitarbeiterverwaltung.AuthorizationManagement.gateways.web.dto.PermissionCreateRequest;
 import com.Mitarbeiterverwaltung.AuthorizationManagement.gateways.web.dto.PermissionUpdateRequest;
 import com.Mitarbeiterverwaltung.AuthorizationManagement.gateways.web.dto.TerminationRequest;
-import com.Mitarbeiterverwaltung.AuthorizationManagement.usecases.primary.OffboardingStatus;
 import com.Mitarbeiterverwaltung.AuthorizationManagement.usecases.primary.PermissionManagementService;
 
 @RestController
@@ -136,17 +134,6 @@ public class PermissionController {
         return ResponseEntity.ok("Permissions aligned to termination date");
     }
 
-    @GetMapping("/permissions/status/offboarding")
-    @Operation(summary = "Offboarding-Status pruefen", description = "Prueft fuer HR, ob alle Berechtigungen erfolgreich entzogen wurden und wann der letzte Entzug stattfand.")
-    public ResponseEntity<OffboardingStatusResponse> offboardingStatus(
-            @RequestParam(name = "employeeId", required = true) Integer employeeId) {
-        if (employeeId == null || employeeId <= 0) {
-            return ResponseEntity.badRequest().build();
-        }
-        OffboardingStatus status = permissionManagementService.checkOffboardingStatus(employeeId);
-        OffboardingStatusResponse response = new OffboardingStatusResponse(status.allRevoked(), status.lastRevokedAt());
-        return ResponseEntity.ok(response);
-    }
 
     private boolean isBlank(String value) {
         return value == null || value.isBlank();
