@@ -178,8 +178,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                     ? TerminationStatus.valueOf(entity.getTerminationStatus())
                     : TerminationStatus.IN_PROGRESS;
             termination = TerminationProcessInformation.restore(entity.getTerminationDate(),
-                    entity.getTerminationReason(), status, entity.isSystemPermissionsRevoked(),
-                    entity.getSystemPermissionsRevokedAt(), entity.isDevicesReturned(),
+                    entity.getTerminationReason(), status, entity.getSystemPermissionsRevokedAt(),
                     entity.getDevicesReturnedAt());
         }
         return Employee.restore(EmployeeNumber.of(entity.getId()), name, address, bankAccount, contract, termination);
@@ -202,9 +201,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                 termination != null ? termination.getTerminationDate() : null,
                 termination != null ? termination.getTerminationReason() : null,
                 termination != null ? termination.getStatus().name() : null,
-                termination != null && termination.isStatusSystemPermissionsRevoked(),
                 termination != null ? termination.getLastSystemPermissionRevokedAt() : null,
-                termination != null && termination.isStatusDevicesReturned(),
                 termination != null ? termination.getLastDevicesReturnedAt() : null);
     }
 }

@@ -8,25 +8,19 @@ public final class TerminationProcessInformation {
     private final LocalDate terminationDate;
     private final String terminationReason;
     private final TerminationStatus status;
-    private final boolean statusSystemPermissionsRevoked;
     private final LocalDateTime lastSystemPermissionRevokedAt;
-    private final boolean statusDevicesReturned;
     private final LocalDateTime lastDevicesReturnedAt;
 
     private TerminationProcessInformation(
             LocalDate terminationDate,
             String terminationReason,
             TerminationStatus status,
-            boolean statusSystemPermissionsRevoked,
             LocalDateTime lastSystemPermissionRevokedAt,
-            boolean statusDevicesReturned,
             LocalDateTime lastDevicesReturnedAt) {
         this.terminationDate = requireNonNull(terminationDate, "terminationDate");
         this.terminationReason = requireNonBlank(terminationReason, "terminationReason");
         this.status = requireNonNull(status, "status");
-        this.statusSystemPermissionsRevoked = statusSystemPermissionsRevoked;
         this.lastSystemPermissionRevokedAt = lastSystemPermissionRevokedAt;
-        this.statusDevicesReturned = statusDevicesReturned;
         this.lastDevicesReturnedAt = lastDevicesReturnedAt;
     }
 
@@ -35,57 +29,54 @@ public final class TerminationProcessInformation {
                 terminationDate,
                 terminationReason,
                 TerminationStatus.IN_PROGRESS,
-                false,
                 null,
-                false,
                 null);
     }
 
     public static TerminationProcessInformation restore(LocalDate terminationDate,
             String terminationReason,
             TerminationStatus status,
-            boolean statusSystemPermissionsRevoked,
             LocalDateTime lastSystemPermissionRevokedAt,
-            boolean statusDevicesReturned,
             LocalDateTime lastDevicesReturnedAt) {
         return new TerminationProcessInformation(terminationDate, terminationReason, status,
-                statusSystemPermissionsRevoked, lastSystemPermissionRevokedAt,
-                statusDevicesReturned, lastDevicesReturnedAt);
+                lastSystemPermissionRevokedAt, lastDevicesReturnedAt);
     }
 
     public TerminationProcessInformation markSystemPermissionsRevoked(LocalDateTime revokedAt) {
         LocalDateTime timestamp = requireNonNull(revokedAt, "revokedAt");
-        boolean permissionsRevoked = true;
-        TerminationStatus newStatus = determineStatus(permissionsRevoked, statusDevicesReturned);
+        LocalDateTime newPermissionsTimestamp = timestamp;
+        TerminationStatus newStatus = determineStatus(newPermissionsTimestamp, lastDevicesReturnedAt);
         return new TerminationProcessInformation(
                 terminationDate,
                 terminationReason,
                 newStatus,
-                permissionsRevoked,
-                timestamp,
-                statusDevicesReturned,
+                newPermissionsTimestamp,
                 lastDevicesReturnedAt);
     }
 
     public TerminationProcessInformation markDevicesReturned(LocalDateTime returnedAt) {
         LocalDateTime timestamp = requireNonNull(returnedAt, "returnedAt");
-        boolean devicesReturned = true;
-        TerminationStatus newStatus = determineStatus(statusSystemPermissionsRevoked, devicesReturned);
+        LocalDateTime newDevicesTimestamp = timestamp;
+        TerminationStatus newStatus = determineStatus(lastSystemPermissionRevokedAt, newDevicesTimestamp);
         return new TerminationProcessInformation(
                 terminationDate,
                 terminationReason,
                 newStatus,
-                statusSystemPermissionsRevoked,
                 lastSystemPermissionRevokedAt,
-                devicesReturned,
-                timestamp);
+                newDevicesTimestamp);
     }
 
-    private TerminationStatus determineStatus(boolean permissionsRevoked, boolean devicesReturned) {
+    private TerminationStatus determineStatus(LocalDateTime permissionsRevokedAt, LocalDateTime devicesReturnedAt) {
+        boolean permissionsRevoked = isDone(permissionsRevokedAt);
+        boolean devicesReturned = isDone(devicesReturnedAt);
         if (permissionsRevoked && devicesReturned) {
             return TerminationStatus.COMPLETED;
         }
         return TerminationStatus.IN_PROGRESS;
+    }
+
+    private boolean isDone(LocalDateTime timestamp) {
+        return timestamp != null && !timestamp.isAfter(LocalDateTime.now());
     }
 
     public boolean isCompleted() {
@@ -105,7 +96,7 @@ public final class TerminationProcessInformation {
     }
 
     public boolean isStatusSystemPermissionsRevoked() {
-        return statusSystemPermissionsRevoked;
+        return isDone(lastSystemPermissionRevokedAt);
     }
 
     public LocalDateTime getLastSystemPermissionRevokedAt() {
@@ -113,7 +104,7 @@ public final class TerminationProcessInformation {
     }
 
     public boolean isStatusDevicesReturned() {
-        return statusDevicesReturned;
+        return isDone(lastDevicesReturnedAt);
     }
 
     public LocalDateTime getLastDevicesReturnedAt() {
@@ -129,9 +120,7 @@ public final class TerminationProcessInformation {
             return false;
         }
         TerminationProcessInformation that = (TerminationProcessInformation) o;
-        return statusSystemPermissionsRevoked == that.statusSystemPermissionsRevoked
-                && statusDevicesReturned == that.statusDevicesReturned
-                && terminationDate.equals(that.terminationDate)
+        return terminationDate.equals(that.terminationDate)
                 && terminationReason.equals(that.terminationReason)
                 && status == that.status
                 && Objects.equals(lastSystemPermissionRevokedAt, that.lastSystemPermissionRevokedAt)
@@ -144,9 +133,7 @@ public final class TerminationProcessInformation {
                 terminationDate,
                 terminationReason,
                 status,
-                statusSystemPermissionsRevoked,
                 lastSystemPermissionRevokedAt,
-                statusDevicesReturned,
                 lastDevicesReturnedAt);
     }
 

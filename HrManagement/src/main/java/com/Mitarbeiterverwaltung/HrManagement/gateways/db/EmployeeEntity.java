@@ -26,9 +26,7 @@ public class EmployeeEntity {
     private LocalDate terminationDate;
     private String terminationReason;
     private String terminationStatus;
-    private boolean systemPermissionsRevoked;
     private LocalDateTime systemPermissionsRevokedAt;
-    private boolean devicesReturned;
     private LocalDateTime devicesReturnedAt;
 
     public EmployeeEntity() {
@@ -37,8 +35,7 @@ public class EmployeeEntity {
     public EmployeeEntity(int id, String firstName, String lastName, String street, String houseNumber,
             String postalCode, String city, String country, String iban, String bic, String accountHolder,
             LocalDate terminationDate, String terminationReason, String terminationStatus,
-            boolean systemPermissionsRevoked, LocalDateTime systemPermissionsRevokedAt,
-            boolean devicesReturned, LocalDateTime devicesReturnedAt) {
+            LocalDateTime systemPermissionsRevokedAt, LocalDateTime devicesReturnedAt) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -53,9 +50,7 @@ public class EmployeeEntity {
         this.terminationDate = terminationDate;
         this.terminationReason = terminationReason;
         this.terminationStatus = terminationStatus;
-        this.systemPermissionsRevoked = systemPermissionsRevoked;
         this.systemPermissionsRevokedAt = systemPermissionsRevokedAt;
-        this.devicesReturned = devicesReturned;
         this.devicesReturnedAt = devicesReturnedAt;
     }
 
@@ -171,28 +166,12 @@ public class EmployeeEntity {
         this.terminationStatus = terminationStatus;
     }
 
-    public boolean isSystemPermissionsRevoked() {
-        return systemPermissionsRevoked;
-    }
-
-    public void setSystemPermissionsRevoked(boolean systemPermissionsRevoked) {
-        this.systemPermissionsRevoked = systemPermissionsRevoked;
-    }
-
     public LocalDateTime getSystemPermissionsRevokedAt() {
         return systemPermissionsRevokedAt;
     }
 
     public void setSystemPermissionsRevokedAt(LocalDateTime systemPermissionsRevokedAt) {
         this.systemPermissionsRevokedAt = systemPermissionsRevokedAt;
-    }
-
-    public boolean isDevicesReturned() {
-        return devicesReturned;
-    }
-
-    public void setDevicesReturned(boolean devicesReturned) {
-        this.devicesReturned = devicesReturned;
     }
 
     public LocalDateTime getDevicesReturnedAt() {

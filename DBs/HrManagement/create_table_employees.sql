@@ -16,26 +16,24 @@ CREATE TABLE employee_entity (
   terminationDate DATE,
   terminationReason VARCHAR(255),
   terminationStatus VARCHAR(50),
-  systemPermissionsRevoked BOOLEAN,
   systemPermissionsRevokedAt DATETIME,
-  devicesReturned BOOLEAN,
   devicesReturnedAt DATETIME
 );
 
 -- Aktiv, kein Offboarding
 INSERT INTO employee_entity (id, firstName, lastName, street, houseNumber, postalCode, city, country, iban, bic, accountHolder,
-  terminationDate, terminationReason, terminationStatus, systemPermissionsRevoked, systemPermissionsRevokedAt, devicesReturned, devicesReturnedAt)
+  terminationDate, terminationReason, terminationStatus, systemPermissionsRevokedAt, devicesReturnedAt)
 VALUES (1, 'Anna', 'Schmidt', 'Hauptstrasse', '12A', '10115', 'Berlin', 'Deutschland', 'DE44500105175407324931', 'BELADEBEXXX', 'Anna Schmidt',
-  NULL, NULL, NULL, FALSE, NULL, FALSE, NULL);
+  NULL, NULL, NULL, NULL, NULL);
 
 -- Kuendigung eingereicht, Offboarding laeuft
 INSERT INTO employee_entity (id, firstName, lastName, street, houseNumber, postalCode, city, country, iban, bic, accountHolder,
-  terminationDate, terminationReason, terminationStatus, systemPermissionsRevoked, systemPermissionsRevokedAt, devicesReturned, devicesReturnedAt)
+  terminationDate, terminationReason, terminationStatus, systemPermissionsRevokedAt, devicesReturnedAt)
 VALUES (2, 'Markus', 'Weber', 'Bahnhofstrasse', '5', '80331', 'Muenchen', 'Deutschland', 'DE21500500009876543210', 'COBADEFFXXX', 'Markus Weber',
-  '2026-03-31', 'Wechsel des Arbeitgebers', 'IN_PROGRESS', FALSE, NULL, FALSE, NULL);
+  '2026-03-31', 'Wechsel des Arbeitgebers', 'IN_PROGRESS', NULL, NULL);
 
 -- Offboarding abgeschlossen (Berechtigungen & Devices erledigt)
 INSERT INTO employee_entity (id, firstName, lastName, street, houseNumber, postalCode, city, country, iban, bic, accountHolder,
-  terminationDate, terminationReason, terminationStatus, systemPermissionsRevoked, systemPermissionsRevokedAt, devicesReturned, devicesReturnedAt)
+  terminationDate, terminationReason, terminationStatus, systemPermissionsRevokedAt, devicesReturnedAt)
 VALUES (3, 'Sofia', 'Keller', 'Ringstrasse', '22', '50667', 'Koeln', 'Deutschland', 'DE12500105170648489890', 'INGDDEFFXXX', 'Sofia Keller',
-  '2025-12-31', 'Umzug ins Ausland', 'COMPLETED', TRUE, '2025-12-15 10:30:00', TRUE, '2025-12-20 16:45:00');
+  '2025-12-31', 'Umzug ins Ausland', 'COMPLETED', '2025-12-15 10:30:00', '2025-12-20 16:45:00');
