@@ -18,7 +18,7 @@ public interface HrManagementService {
 
     Optional<EmploymentContract> addEmploymentContract(int employeeId, EmploymentContract contract);
 
-    Optional<Employee> terminateContract(long contractId, LocalDate terminationDate, String reason);
+    Optional<Employee> terminateContract(int employeeId, LocalDate terminationDate, String reason);
 
     Optional<TerminationProcessInformation> getOffboardingStatus(int employeeId);
 

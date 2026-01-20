@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.math.BigDecimal;
 
 public class EmploymentContractResponse {
-    private Long id;
     private String jobTitle;
     private String responsibilities;
     private BigDecimal annualSalary;
@@ -14,9 +13,8 @@ public class EmploymentContractResponse {
     private LocalDate endDate;
     private String status;
 
-    public EmploymentContractResponse(Long id, String jobTitle, String responsibilities, BigDecimal annualSalary,
+    public EmploymentContractResponse(String jobTitle, String responsibilities, BigDecimal annualSalary,
             String currency, LocalDate startDate, LocalDate endDate, String status) {
-        this.id = id;
         this.jobTitle = jobTitle;
         this.responsibilities = responsibilities;
         this.annualSalary = annualSalary;
@@ -24,10 +22,6 @@ public class EmploymentContractResponse {
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getJobTitle() {

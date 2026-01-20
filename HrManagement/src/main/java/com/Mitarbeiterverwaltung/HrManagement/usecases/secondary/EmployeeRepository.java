@@ -13,11 +13,7 @@ public interface EmployeeRepository {
 
     Optional<Employee> findEmployee(EmployeeNumber employeeNumber);
 
-    Optional<Employee> findEmployeeByContractId(long contractId);
-
     List<Employee> findEmployeesActiveAt(LocalDate date);
 
     EmploymentContract saveContract(EmployeeNumber employeeNumber, EmploymentContract contract);
-
-    Optional<EmploymentContract> findContractById(long contractId);
 }

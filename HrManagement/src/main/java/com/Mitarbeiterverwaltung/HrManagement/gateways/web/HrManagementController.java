@@ -116,22 +116,22 @@ public class HrManagementController {
         }
     }
 
-    @Operation(summary = "Vertrag kuendigen", description = "Markiert einen Vertrag als gekuendigt und startet Offboarding")
+        @Operation(summary = "Vertrag kuendigen", description = "Markiert den Vertrag eines Mitarbeiters als gekuendigt und startet Offboarding")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Kuendigung verbucht"),
-            @ApiResponse(responseCode = "404", description = "Vertrag nicht gefunden"),
+            @ApiResponse(responseCode = "404", description = "Mitarbeiter nicht gefunden"),
             @ApiResponse(responseCode = "409", description = "Kuendigung ungueltig") })
-    @PatchMapping("/contracts/{id}/terminate")
-    public ResponseEntity<?> terminateContract(@PathVariable("id") long contractId,
+        @PatchMapping("/employees/{id}/terminate")
+        public ResponseEntity<?> terminateContract(@PathVariable("id") int employeeId,
             @RequestBody TerminateContractRequest request) {
         if (request == null || request.getTerminationDate() == null || isBlank(request.getReason())) {
             return ResponseEntity.badRequest().body("terminationDate und reason sind Pflichtfelder");
         }
         try {
-            Optional<Employee> employee = hrManagementService.terminateContract(contractId, request.getTerminationDate(),
+            Optional<Employee> employee = hrManagementService.terminateContract(employeeId, request.getTerminationDate(),
                     request.getReason());
             return employee.<ResponseEntity<?>>map(value -> ResponseEntity.ok(toEmployeeResponse(value)))
-                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vertrag nicht gefunden"));
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Mitarbeiter nicht gefunden"));
         } catch (IllegalStateException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
         } catch (IllegalArgumentException ex) {
@@ -180,9 +180,9 @@ public class HrManagementController {
 
     private EmploymentContractResponse toContractResponse(EmploymentContract contract) {
         String status = resolveContractStatus(contract.getEndDate());
-        return new EmploymentContractResponse(contract.getContractId(), contract.getJobTitle(),
-                contract.getResponsibilities(), contract.getAnnualSalary().getAmount(),
-                contract.getAnnualSalary().getCurrency(), contract.getStartDate(), contract.getEndDate(), status);
+        return new EmploymentContractResponse(contract.getJobTitle(), contract.getResponsibilities(),
+            contract.getAnnualSalary().getAmount(), contract.getAnnualSalary().getCurrency(),
+            contract.getStartDate(), contract.getEndDate(), status);
     }
 
     private OffboardingStatusResponse toOffboardingResponse(TerminationProcessInformation info) {

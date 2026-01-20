@@ -58,8 +58,8 @@ public class HrManagementServiceImpl implements HrManagementService {
     }
 
     @Override
-    public Optional<Employee> terminateContract(long contractId, LocalDate terminationDate, String reason) {
-        Optional<Employee> employeeOpt = employeeRepository.findEmployeeByContractId(contractId);
+    public Optional<Employee> terminateContract(int employeeId, LocalDate terminationDate, String reason) {
+        Optional<Employee> employeeOpt = employeeRepository.findEmployee(EmployeeNumber.of(employeeId));
         if (employeeOpt.isEmpty()) {
             return Optional.empty();
         }
