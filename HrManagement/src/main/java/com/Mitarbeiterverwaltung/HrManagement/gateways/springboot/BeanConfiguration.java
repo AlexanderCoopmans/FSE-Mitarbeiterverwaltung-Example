@@ -1,5 +1,9 @@
 package com.Mitarbeiterverwaltung.HrManagement.gateways.springboot;
 
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,10 +22,38 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Configuration
 public class BeanConfiguration {
 
+	private static final String HR_EVENTS_EXCHANGE = "hr.events";
+	private static final String HR_ROUTING_EMPLOYMENT_TERMINATED = "employment.terminated";
+	private static final String DEVICES_EVENTS_EXCHANGE = "devices.events";
+	private static final String DEVICES_ROUTING_ALL_RETURNED = "devices.returned";
+	private static final String DEVICES_ALL_RETURNED_QUEUE = "devices_all_returned";
+
 	@Bean
 	public EmployeeRepository employeeRepository(EmployeeEntityRepository employeeEntityRepository,
 			EmploymentContractEntityRepository employmentContractEntityRepository) {
 		return new EmployeeRepositoryImpl(employeeEntityRepository, employmentContractEntityRepository);
+	}
+
+	@Bean
+	public DirectExchange hrEventsExchange() {
+		return new DirectExchange(HR_EVENTS_EXCHANGE, true, false);
+	}
+
+	@Bean
+	public DirectExchange devicesEventsExchange() {
+		return new DirectExchange(DEVICES_EVENTS_EXCHANGE, true, false);
+	}
+
+	@Bean
+	public Queue devicesAllReturnedQueue() {
+		return new Queue(DEVICES_ALL_RETURNED_QUEUE, true);
+	}
+
+	@Bean
+	public Binding devicesAllReturnedBinding(Queue devicesAllReturnedQueue, DirectExchange devicesEventsExchange) {
+		return BindingBuilder.bind(devicesAllReturnedQueue)
+				.to(devicesEventsExchange)
+				.with(DEVICES_ROUTING_ALL_RETURNED);
 	}
 
 	@Bean
