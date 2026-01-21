@@ -15,7 +15,7 @@ Starten Sie mit `docker compose up` im Terminal
 - **HR-Management:** [GET](http://localhost:8081/employees) `/employees`
 - **Berechtigungsmanagement:** [GET](http://localhost:8083/permissions?employeeId=1) `/permissions`
   - Eingabe: `employeeId=101`
-- **Device-Management:** [GET](http://localhost:8083/devices) `/devices`
+- **Device-Management:** [GET](http://localhost:8082/devices) `/devices`
 
 ### Kündigung
 
@@ -34,11 +34,22 @@ Starten Sie mit `docker compose up` im Terminal
 - **Berechtigungsmanagement:** [GET](http://localhost:8083/permissions?employeeId=1) `/permissions`
   - Eingabe: `employeeId = 101`
 - **Device-Management:**
-  - [GET](http://localhost:8083/devices) `/devices`
+  - [GET](http://localhost:8082/devices) `/devices`
   - [GET](http://localhost:8082/assignments/dueforreturn) `/assignments/dueforreturn`
 
 ### HR-Management: Monitoring
 
+- **HR-Management:** [GET](http://localhost:8081/employees/1/offboarding-status) `/employees/{id}/offboarding-status`
+  - Eingabe: `id = 1`
+
+### Gerät Zurückgeben
+
+- **Device-Management:** PATCH `/assignments/{deviceId}/return`
+  - Eingabe: `deviceId = 101`
+
+### HR-Management: Rückgabe prüfen
+
+- **Device-Management:** [GET](http://localhost:8082/assignments/1) `/assignments/{employeeId}`
 - **HR-Management:** [GET](http://localhost:8081/employees/1/offboarding-status) `/employees/{id}/offboarding-status`
   - Eingabe: `id = 1`
 
