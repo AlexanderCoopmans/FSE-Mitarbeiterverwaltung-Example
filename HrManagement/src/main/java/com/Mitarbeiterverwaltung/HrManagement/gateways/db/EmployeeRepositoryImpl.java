@@ -6,8 +6,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.Mitarbeiterverwaltung.HrManagement.domain.Address;
 import com.Mitarbeiterverwaltung.HrManagement.domain.BankAccount;
 import com.Mitarbeiterverwaltung.HrManagement.domain.Employee;

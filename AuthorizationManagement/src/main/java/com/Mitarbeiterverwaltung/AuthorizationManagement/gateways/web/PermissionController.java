@@ -1,6 +1,5 @@
 package com.Mitarbeiterverwaltung.AuthorizationManagement.gateways.web;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,7 +40,8 @@ public class PermissionController {
 
     @GetMapping("/permissions")
     @Operation(summary = "Berechtigungshistorie abrufen", description = "Liefert eine Liste aller aktuellen und vergangenen Berechtigungen eines Mitarbeiters anhand der Mitarbeiter-ID.")
-    public ResponseEntity<List<String>> permissionsByEmployee(@RequestParam(name = "employeeId", required = true) Integer employeeId) {
+    public ResponseEntity<List<String>> permissionsByEmployee(
+            @RequestParam(name = "employeeId", required = true) Integer employeeId) {
         if (employeeId == null || employeeId <= 0) {
             return ResponseEntity.badRequest().body(List.of("employeeId is required"));
         }
@@ -54,9 +54,11 @@ public class PermissionController {
     @PostMapping("/permissions")
     @Operation(summary = "Neue Berechtigung erteilen", description = "Legt einen neuen Berechtigungseintrag fuer ein Anwendungssystem und eine Rolle an.")
     public ResponseEntity<String> grantPermission(@RequestBody PermissionCreateRequest request) {
-        if (request == null || request.getEmployeeId() <= 0 || isBlank(request.getSystem()) || isBlank(request.getRole())
+        if (request == null || request.getEmployeeId() <= 0 || isBlank(request.getSystem())
+                || isBlank(request.getRole())
                 || request.getValidFrom() == null || request.getValidTo() == null) {
-            return ResponseEntity.badRequest().body("Missing or invalid fields: employeeId, system, role, validFrom, validTo");
+            return ResponseEntity.badRequest()
+                    .body("Missing or invalid fields: employeeId, system, role, validFrom, validTo");
         }
 
         ValidityPeriod validityPeriod;
@@ -133,7 +135,6 @@ public class PermissionController {
         permissionManagementService.terminateEmployeePermissions(request.getEmployeeId(), request.getTerminationDate());
         return ResponseEntity.ok("Permissions aligned to termination date");
     }
-
 
     private boolean isBlank(String value) {
         return value == null || value.isBlank();

@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.Mitarbeiterverwaltung.HrManagement.domain.Employee;
 import com.Mitarbeiterverwaltung.HrManagement.domain.TerminationProcessInformation;
 import com.Mitarbeiterverwaltung.HrManagement.usecases.primary.HrManagementService;
