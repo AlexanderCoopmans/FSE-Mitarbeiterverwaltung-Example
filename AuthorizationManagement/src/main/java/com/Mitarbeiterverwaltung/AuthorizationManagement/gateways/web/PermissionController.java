@@ -43,7 +43,7 @@ public class PermissionController {
     public ResponseEntity<List<String>> permissionsByEmployee(
             @RequestParam(name = "employeeId", required = true) Integer employeeId) {
         if (employeeId == null || employeeId <= 0) {
-            return ResponseEntity.badRequest().body(List.of("employeeId is required"));
+            return ResponseEntity.badRequest().body(List.of("Mitarbeiter-ID ist erforderlich"));
         }
         List<String> permissions = permissionManagementService.getPermissionHistory(employeeId).stream()
                 .map(permissionManagementService::toReadableInformation)
@@ -58,7 +58,7 @@ public class PermissionController {
                 || isBlank(request.getRole())
                 || request.getValidFrom() == null || request.getValidTo() == null) {
             return ResponseEntity.badRequest()
-                    .body("Missing or invalid fields: employeeId, system, role, validFrom, validTo");
+                .body("Fehlende oder ungueltige Felder: employeeId, system, role, validFrom, validTo");
         }
 
         ValidityPeriod validityPeriod;
@@ -76,7 +76,8 @@ public class PermissionController {
                 validityPeriod);
         return created.map(permissionManagementService::toReadableInformation)
                 .map(body -> ResponseEntity.status(HttpStatus.CREATED).body(body))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Permission could not be created"));
+            .orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("Berechtigung konnte nicht erstellt werden"));
     }
 
     @PutMapping("/permissions/{id}")
@@ -87,7 +88,7 @@ public class PermissionController {
         try {
             permissionId = PermissionId.of(UUID.fromString(id));
         } catch (IllegalArgumentException ex) {
-            return ResponseEntity.badRequest().body("Invalid permission id");
+            return ResponseEntity.badRequest().body("Ungueltige Berechtigungs-ID");
         }
 
         Role newRole = null;
@@ -105,7 +106,7 @@ public class PermissionController {
 
         return updated.map(permissionManagementService::toReadableInformation)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Permission not found"));
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Berechtigung nicht gefunden"));
     }
 
     @DeleteMapping("/permissions/{id}")
@@ -115,21 +116,22 @@ public class PermissionController {
         try {
             permissionId = PermissionId.of(UUID.fromString(id));
         } catch (IllegalArgumentException ex) {
-            return ResponseEntity.badRequest().body("Invalid permission id");
+            return ResponseEntity.badRequest().body("Ungueltige Berechtigungs-ID");
         }
 
         boolean revoked = permissionManagementService.revokePermission(permissionId);
         if (!revoked) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Permission not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Berechtigung nicht gefunden");
         }
-        return ResponseEntity.ok("Permission revoked");
+        return ResponseEntity.ok("Berechtigung entzogen");
     }
 
     @PostMapping("/permissions/actions/terminate")
     @Operation(summary = "Alle Berechtigungen beenden (Kuendigung)", description = "Setzt das Enddatum aller aktiven Berechtigungen auf den angegebenen Stichtag. Wird vom HR-Service bei Vertragsende aufgerufen.")
     public ResponseEntity<String> terminatePermissions(@RequestBody TerminationRequest request) {
         if (request == null || request.getEmployeeId() <= 0 || request.getTerminationDate() == null) {
-            return ResponseEntity.badRequest().body("Missing or invalid fields: employeeId, terminationDate");
+            return ResponseEntity.badRequest()
+                    .body("Fehlende oder ungueltige Felder: employeeId, terminationDate");
         }
 
         permissionManagementService.terminateEmployeePermissions(request.getEmployeeId(), request.getTerminationDate());
