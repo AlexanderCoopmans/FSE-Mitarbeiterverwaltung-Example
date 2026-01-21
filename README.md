@@ -21,12 +21,21 @@ Starten Sie mit `docker compose up` im Terminal
 
 - **HR-Management:** PATCH `/employees/{id}/termination`
   - Eingabe: `id = 1`
+  - Eingabe (application/json):
+    ```json
+    {
+      "terminationDate": "2026-01-22",
+      "reason": "Ideologische Differenzen"
+    }
+    ```
 
 ### Automatische Auswirkungen
 
 - **Berechtigungsmanagement:** [GET](http://localhost:8083/permissions?employeeId=1) `/permissions`
   - Eingabe: `employeeId = 101`
-- **Device-Management:** [GET](http://localhost:8083/devices) `/devices`
+- **Device-Management:**
+  - [GET](http://localhost:8083/devices) `/devices`
+  - [GET](http://localhost:8082/assignments/dueforreturn) `/assignments/dueforreturn`
 
 ### HR-Management: Monitoring
 
