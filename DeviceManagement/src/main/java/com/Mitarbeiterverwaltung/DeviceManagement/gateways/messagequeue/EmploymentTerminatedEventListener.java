@@ -11,31 +11,28 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class EmploymentTerminatedEventListener {
 
-	DeviceManagementService deviceManagementService;
+	private final DeviceManagementService deviceManagementService;
+	private final ObjectMapper objectMapper;
 
-	public EmploymentTerminatedEventListener(DeviceManagementService deviceManagementService) {
+	public EmploymentTerminatedEventListener(DeviceManagementService deviceManagementService,
+			ObjectMapper objectMapper) {
 		this.deviceManagementService = deviceManagementService;
+		this.objectMapper = objectMapper;
 	}
 
 	@RabbitListener(queues = "employment_terminated")
 	public void receiveMessage(String message) {
-		// Process the received message
 		System.out.println("#################Received message:################# " + message);
-
-		ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			EmploymentTerminatedTO employmentTerminatedTO = objectMapper.readValue(message,
 					EmploymentTerminatedTO.class);
-			deviceManagementService.handleEmploymentTermination(employmentTerminatedTO.getEmployeeId(),
-					employmentTerminatedTO.getTerminationDate());
+			deviceManagementService.handleEmploymentTermination(
+					employmentTerminatedTO.getEmployeeId(), employmentTerminatedTO.getTerminationDate());
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.Mitarbeiterverwaltung.DeviceManagement.gateways.springboot;
 
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,5 +38,10 @@ public class BeanConfiguration {
     public DeviceManagementService deviceManagementService(DeviceRepository deviceRepository,
             AllDevicesReturnedEventPublisher allDevicesReturnedEventPublisher) {
         return new DeviceManagementServiceImpl(deviceRepository, allDevicesReturnedEventPublisher);
+    }
+
+    @Bean
+    public Queue employmentTerminatedQueue() {
+        return new Queue("employment_terminated", true);
     }
 }

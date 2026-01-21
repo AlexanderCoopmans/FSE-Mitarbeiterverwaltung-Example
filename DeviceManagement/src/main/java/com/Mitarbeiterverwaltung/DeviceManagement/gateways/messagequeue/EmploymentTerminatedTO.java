@@ -3,10 +3,14 @@ package com.Mitarbeiterverwaltung.DeviceManagement.gateways.messagequeue;
 import java.time.LocalDate;
 
 public class EmploymentTerminatedTO {
-    int employeeId;
-    LocalDate terminationDate;
+    private int employeeId;
+    private LocalDate terminationDate;
 
-    EmploymentTerminatedTO(int employeeId, LocalDate terminationDate) {
+    public EmploymentTerminatedTO() {
+        // default constructor for Jackson
+    }
+
+    public EmploymentTerminatedTO(int employeeId, LocalDate terminationDate) {
         this.employeeId = employeeId;
         this.terminationDate = terminationDate;
     }
