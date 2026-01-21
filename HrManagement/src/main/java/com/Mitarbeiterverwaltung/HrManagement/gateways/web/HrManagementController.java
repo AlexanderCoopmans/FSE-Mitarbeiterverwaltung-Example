@@ -81,8 +81,8 @@ public class HrManagementController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Mitarbeiter nicht gefunden"));
     }
 
-    @Operation(summary = "Aktive Mitarbeiter", description = "Listet alle Mitarbeiter, die zu einem Datum aktiv sind")
-    @GetMapping(value = "/employees", params = { "activeAt" })
+    @Operation(summary = "Aktive Mitarbeiter", description = "Listet alle Mitarbeiter, die zu einem Datum aktiv sind. Ohne Angabe wird das heutige Datum verwendet.")
+    @GetMapping(value = "/employees")
     public ResponseEntity<?> activeEmployees(@RequestParam(value = "activeAt", required = false) String activeAt) {
         LocalDate date;
         try {
