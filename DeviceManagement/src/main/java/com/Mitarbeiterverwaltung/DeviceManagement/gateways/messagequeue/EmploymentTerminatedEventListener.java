@@ -20,7 +20,7 @@ public class EmploymentTerminatedEventListener {
 		this.objectMapper = objectMapper;
 	}
 
-	@RabbitListener(queues = "employment_terminated_devices")
+	@RabbitListener(queues = "employment_terminated")
 	public void receiveMessage(String message) {
 		System.out.println("#################Received message:################# " + message);
 		try {

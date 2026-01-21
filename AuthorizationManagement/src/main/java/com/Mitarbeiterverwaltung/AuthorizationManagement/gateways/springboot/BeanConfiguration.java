@@ -2,6 +2,7 @@ package com.Mitarbeiterverwaltung.AuthorizationManagement.gateways.springboot;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -24,6 +25,9 @@ public class BeanConfiguration {
 	private static final String PERMISSION_EVENTS_EXCHANGE = "permissions.events";
 	private static final String OFFBOARDING_STATUS_QUEUE = "permissions_offboarding_status";
 	private static final String ROUTING_OFFBOARDING_STATUS = "offboarding.status";
+	private static final String HR_EVENTS_EXCHANGE = "hr.events";
+	private static final String ROUTING_EMPLOYMENT_TERMINATED = "employment.terminated";
+	private static final String EMPLOYMENT_TERMINATED_QUEUE = "employment_terminated";
 
 	@Bean
 	public PermissionRepository permissionRepository(PermissionEntityRepository permissionEntityRepository) {
@@ -31,13 +35,26 @@ public class BeanConfiguration {
 	}
 
 	@Bean
-	public PermissionManagementService permissionManagementService(PermissionRepository permissionRepository) {
-		return new PermissionManagementServiceImpl(permissionRepository);
+	public PermissionManagementService permissionManagementService(PermissionRepository permissionRepository,
+				OffboardingStatusEventPublisher offboardingStatusEventPublisher) {
+		return new PermissionManagementServiceImpl(permissionRepository, offboardingStatusEventPublisher);
 	}
 
 	@Bean
 	public Queue employmentTerminatedQueue() {
-		return new Queue("employment_terminated_permissions", true);
+		return new Queue(EMPLOYMENT_TERMINATED_QUEUE, true);
+	}
+
+	@Bean
+	public DirectExchange hrEventsExchange() {
+		return new DirectExchange(HR_EVENTS_EXCHANGE, true, false);
+	}
+
+	@Bean
+	public Binding employmentTerminatedBinding(Queue employmentTerminatedQueue, DirectExchange hrEventsExchange) {
+		return BindingBuilder.bind(employmentTerminatedQueue)
+				.to(hrEventsExchange)
+				.with(ROUTING_EMPLOYMENT_TERMINATED);
 	}
 
 	@Bean
