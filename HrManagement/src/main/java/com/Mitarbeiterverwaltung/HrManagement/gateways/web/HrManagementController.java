@@ -26,7 +26,6 @@ import com.Mitarbeiterverwaltung.HrManagement.domain.Name;
 import com.Mitarbeiterverwaltung.HrManagement.domain.TerminationProcessInformation;
 import com.Mitarbeiterverwaltung.HrManagement.gateways.web.dto.AddressResponse;
 import com.Mitarbeiterverwaltung.HrManagement.gateways.web.dto.BankAccountResponse;
-import com.Mitarbeiterverwaltung.HrManagement.gateways.web.dto.ContractCreateRequest;
 import com.Mitarbeiterverwaltung.HrManagement.gateways.web.dto.EmployeeCreateRequest;
 import com.Mitarbeiterverwaltung.HrManagement.gateways.web.dto.EmployeeResponse;
 import com.Mitarbeiterverwaltung.HrManagement.gateways.web.dto.EmploymentContractResponse;
@@ -97,25 +96,6 @@ public class HrManagementController {
         return ResponseEntity.ok(employees);
     }
 
-    @Operation(summary = "Neuen Vertrag hinzufuegen", description = "Ergaenzt einen bestehenden Mitarbeiter um einen neuen Vertrag")
-    @PostMapping("/employees/{id}/contracts")
-    public ResponseEntity<?> addContract(@PathVariable("id") int employeeId,
-            @RequestBody ContractCreateRequest request) {
-        if (!isValidContractRequest(request)) {
-            return ResponseEntity.badRequest().body("Pflichtfelder fehlen oder sind ungueltig");
-        }
-        try {
-            EmploymentContract contract = EmploymentContract.of(request.getJobTitle(), request.getResponsibilities(),
-                    Money.of(request.getAnnualSalary(), request.getCurrency()), request.getStartDate(),
-                    request.getEndDate());
-            Optional<EmploymentContract> saved = hrManagementService.addEmploymentContract(employeeId, contract);
-            return saved.<ResponseEntity<?>>map(value -> ResponseEntity.status(HttpStatus.CREATED).body(toContractResponse(value)))
-                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Mitarbeiter nicht gefunden"));
-        } catch (IllegalArgumentException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
-    }
-
         @Operation(summary = "Vertrag kuendigen", description = "Markiert den Vertrag eines Mitarbeiters als gekuendigt und startet Offboarding")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Kuendigung verbucht"),
@@ -159,12 +139,6 @@ public class HrManagementController {
                 && !isBlank(request.getResponsibilities()) && request.getAnnualSalary() != null
                 && request.getAnnualSalary().signum() > 0 && !isBlank(request.getCurrency())
                 && request.getStartDate() != null;
-    }
-
-    private boolean isValidContractRequest(ContractCreateRequest request) {
-        return request != null && !isBlank(request.getJobTitle()) && !isBlank(request.getResponsibilities())
-                && request.getAnnualSalary() != null && request.getAnnualSalary().signum() > 0
-                && !isBlank(request.getCurrency()) && request.getStartDate() != null;
     }
 
     private EmployeeResponse toEmployeeResponse(Employee employee) {

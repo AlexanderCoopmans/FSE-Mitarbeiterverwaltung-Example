@@ -8,7 +8,6 @@ import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.Mitarbeiterverwaltung.HrManagement.domain.Employee;
-import com.Mitarbeiterverwaltung.HrManagement.domain.EmploymentContract;
 import com.Mitarbeiterverwaltung.HrManagement.domain.TerminationProcessInformation;
 import com.Mitarbeiterverwaltung.HrManagement.usecases.primary.HrManagementService;
 import com.Mitarbeiterverwaltung.HrManagement.usecases.secondary.EmployeeRepository;
@@ -50,18 +49,6 @@ public class HrManagementServiceImpl implements HrManagementService {
         return employeeRepository.findEmployeesActiveAt(targetDate);
     }
 
-    @Override
-    public Optional<EmploymentContract> addEmploymentContract(int employeeId, EmploymentContract contract) {
-        Optional<Employee> employeeOpt = employeeRepository.findById(employeeId);
-        if (employeeOpt.isEmpty()) {
-            return Optional.empty();
-        }
-        Employee employee = employeeOpt.get();
-        if (employee.getTerminationProcessInformation().isPresent()) {
-            throw new IllegalStateException("Termination process already started");
-        }
-        return employeeRepository.addContract(employeeId, contract);
-    }
 
     @Override
     public Optional<Employee> terminateContract(int employeeId, LocalDate terminationDate, String reason) {
