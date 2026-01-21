@@ -35,34 +35,35 @@ INSERT INTO employee_entity (
     termination_date, termination_reason, termination_status,
     system_permissions_revoked_at, devices_returned_at
 ) VALUES
+-- Angestellt unbefristet
 (1, 'Anna', 'Schmidt', 'Hauptstrasse', '12A', '10115', 'Berlin', 'Deutschland',
  'DE44500105175407324931', 'BELADEBEXXX', 'Anna Schmidt',
  'Software Engineer', 'Backend Services', 72000.00, 'EUR',
  '2024-04-01', NULL,
  NULL, NULL, NULL,
  NULL, NULL),
-
+-- Angestellt unbefrisstet
 (2, 'Markus', 'Weber', 'Bahnhofstrasse', '5', '80331', 'Muenchen', 'Deutschland',
  'DE21500500009876543210', 'COBADEFFXXX', 'Markus Weber',
  'Product Manager', 'Feature Ownership', 85000.00, 'EUR',
  '2023-10-01', NULL,
  NULL, NULL, NULL,
  NULL, NULL),
-
+-- Wird zum 01.05.2026 befristet eingestellt
 (3, 'Sofia', 'Keller', 'Ringstrasse', '22', '50667', 'Koeln', 'Deutschland',
  'DE12500105170648489890', 'INGDDEFFXXX', 'Sofia Keller',
  'UX Designer', 'Design System', 69000.00, 'EUR',
  '2026-05-01', '2029-04-30',
  NULL, NULL, NULL,
  NULL, NULL),
-
+-- Angestellt befristet bis 01.06.2026
 (4, 'Lukas', 'Fischer', 'Seestrasse', '18', '20095', 'Hamburg', 'Deutschland',
  'DE75512108001245126199', 'HASPDEHHXXX', 'Lukas Fischer',
  'Data Engineer', 'Data Pipelines', 93000.00, 'EUR',
  '2023-06-01', '2026-06-01',
- '2026-02-28', 'Teamumbau', 'IN_PROGRESS',
+ NULL, NULL, NULL,
  NULL, NULL),
-
+-- Vertrag ausgelaufen nicht mehr angestellt
 (5, 'Mara', 'Nguyen', 'Eschenweg', '14', '60486', 'Frankfurt', 'Deutschland',
  'DE89370400440532013000', 'COBADEFFXXX', 'Mara Nguyen',
  'HR Specialist', 'Employee Relations', 62000.00, 'EUR',

@@ -12,25 +12,24 @@ CREATE TABLE permission_entity (
 );
 
 -- Beispiel-Berechtigungen 
--- 1 Anna Schmidt: aktiv
+-- Berechtigungen für Anna Schmidt (Software Engineer, Backend)
 INSERT INTO permission_entity (id, employee_number, system_name, role_name, valid_from, valid_until, revoked)
-VALUES ('11111111-1111-1111-1111-111111111111', 1, 'VSC', 'ENGINEER', '2024-04-01', '2027-03-31', FALSE);
+VALUES 
+('550e8400-e29b-41d4-a716-446655440001', 1, 'GitHub', 'Backend-Developer-Write', '2024-04-01', '2099-12-31', FALSE),
+('550e8400-e29b-41d4-a716-446655440002', 1, 'AWS Console', 'PowerUserAccess', '2024-04-01', '2099-12-31', FALSE),
+('550e8400-e29b-41d4-a716-446655440003', 1, 'Jira', 'Developer-Role', '2024-04-01', '2099-12-31', FALSE);
 
--- 2 Markus Weber: aktiv
+-- Berechtigungen für Markus Weber (Product Manager)
 INSERT INTO permission_entity (id, employee_number, system_name, role_name, valid_from, valid_until, revoked)
-VALUES ('22222222-2222-2222-2222-222222222222', 2, 'PRODUCT-HUB', 'PM', '2023-10-01', '2027-09-30', FALSE);
+VALUES 
+('550e8400-e29b-41d4-a716-446655440004', 2, 'Jira', 'Product-Owner', '2023-10-01', '2099-12-31', FALSE),
+('550e8400-e29b-41d4-a716-446655440005', 2, 'Confluence', 'Space-Admin-Product', '2023-10-01', '2099-12-31', FALSE),
+('550e8400-e29b-41d4-a716-446655440006', 2, 'Productboard', 'Editor', '2023-10-01', '2099-12-31', FALSE);
 
--- 3 Sofia Keller:
+-- Berechtigungen für Lukas Fischer (Data Engineer)
+-- Hinweis: valid_until ist hier auf das Vertragsende 2026-06-01 begrenzt
 INSERT INTO permission_entity (id, employee_number, system_name, role_name, valid_from, valid_until, revoked)
-VALUES ('33333333-3333-3333-3333-333333333333', 3, 'DESIGN-SUITE', 'DESIGNER', '2025-05-01', '2029-04-30', FALSE);
-
--- 4 Lukas Fischer: 
-INSERT INTO permission_entity (id, employee_number, system_name, role_name, valid_from, valid_until, revoked)
-VALUES ('44444444-4444-4444-4444-444444444444', 4, 'DATA-PLATFORM', 'ENGINEER', '2023-06-01', '2026-06-01', FALSE);
-
--- 5 Mara Nguyen:
-INSERT INTO permission_entity (id, employee_number, system_name, role_name, valid_from, valid_until, revoked)
-VALUES ('55555555-5555-5555-5555-555555555555', 5, 'HR-APP', 'EDITOR', '2022-01-15', '2030-11-30', TRUE);
-
-
-
+VALUES 
+('550e8400-e29b-41d4-a716-446655440007', 4, 'Snowflake', 'Data-Engineer-Admin', '2023-06-01', '2026-06-01', FALSE),
+('550e8400-e29b-41d4-a716-446655440008', 4, 'Airflow', 'DAG-Manager', '2023-06-01', '2026-06-01', FALSE),
+('550e8400-e29b-41d4-a716-446655440009', 4, 'GitHub', 'Data-Pipeline-Repo-Write', '2023-06-01', '2026-06-01', FALSE);
