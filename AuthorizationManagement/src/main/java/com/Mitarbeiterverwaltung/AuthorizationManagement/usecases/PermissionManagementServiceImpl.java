@@ -13,14 +13,18 @@ import com.Mitarbeiterverwaltung.AuthorizationManagement.domain.SystemPermission
 import com.Mitarbeiterverwaltung.AuthorizationManagement.domain.ValidityPeriod;
 import com.Mitarbeiterverwaltung.AuthorizationManagement.usecases.primary.OffboardingStatus;
 import com.Mitarbeiterverwaltung.AuthorizationManagement.usecases.primary.PermissionManagementService;
+import com.Mitarbeiterverwaltung.AuthorizationManagement.usecases.secondary.OffboardingStatusEventPublisher;
 import com.Mitarbeiterverwaltung.AuthorizationManagement.usecases.secondary.PermissionRepository;
 
 public class PermissionManagementServiceImpl implements PermissionManagementService {
 
     private final PermissionRepository permissionRepository;
+    private final OffboardingStatusEventPublisher offboardingStatusEventPublisher;
 
-    public PermissionManagementServiceImpl(PermissionRepository permissionRepository) {
+    public PermissionManagementServiceImpl(PermissionRepository permissionRepository,
+            OffboardingStatusEventPublisher offboardingStatusEventPublisher) {
         this.permissionRepository = permissionRepository;
+        this.offboardingStatusEventPublisher = offboardingStatusEventPublisher;
     }
 
     @Override
@@ -60,6 +64,8 @@ public class PermissionManagementServiceImpl implements PermissionManagementServ
         SystemPermission permission = permissionOpt.get();
         permission.revokeEffective(LocalDate.now());
         permissionRepository.save(permission);
+        int employeeId = permission.getEmployeeReference().getEmployeeNumber();
+        offboardingStatusEventPublisher.publishOffboardingStatus(employeeId, checkOffboardingStatus(employeeId));
         return true;
     }
 
@@ -72,6 +78,7 @@ public class PermissionManagementServiceImpl implements PermissionManagementServ
             permission.alignToContractEnd(endDate);
             permissionRepository.save(permission);
         }
+        offboardingStatusEventPublisher.publishOffboardingStatus(employeeId, checkOffboardingStatus(employeeId));
     }
 
     @Override
