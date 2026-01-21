@@ -14,7 +14,7 @@ CREATE TABLE permission_entity (
 -- Beispiel-Berechtigungen 
 -- 1 Anna Schmidt: aktiv
 INSERT INTO permission_entity (id, employee_number, system_name, role_name, valid_from, valid_until, revoked)
-VALUES ('11111111-1111-1111-1111-111111111111', 1, 'HR-APP', 'ADMIN', '2024-04-01', '2027-03-31', FALSE);
+VALUES ('11111111-1111-1111-1111-111111111111', 1, 'VSC', 'ENGINEER', '2024-04-01', '2027-03-31', FALSE);
 
 -- 2 Markus Weber: aktiv
 INSERT INTO permission_entity (id, employee_number, system_name, role_name, valid_from, valid_until, revoked)

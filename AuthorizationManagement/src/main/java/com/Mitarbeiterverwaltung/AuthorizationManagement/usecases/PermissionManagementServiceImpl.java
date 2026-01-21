@@ -78,7 +78,10 @@ public class PermissionManagementServiceImpl implements PermissionManagementServ
             permission.alignToContractEnd(endDate);
             permissionRepository.save(permission);
         }
-        offboardingStatusEventPublisher.publishOffboardingStatus(employeeId, checkOffboardingStatus(employeeId));
+        boolean anyActiveAfterAlignment = !permissionRepository.findActivePermissionsByEmployee(employeeId, endDate)
+                .isEmpty();
+        OffboardingStatus status = new OffboardingStatus(!anyActiveAfterAlignment, endDate);
+        offboardingStatusEventPublisher.publishOffboardingStatus(employeeId, status);
     }
 
     @Override
