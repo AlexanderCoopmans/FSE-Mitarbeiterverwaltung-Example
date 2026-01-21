@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class BeanConfiguration {
 
 	private static final String PERMISSION_EVENTS_EXCHANGE = "permissions.events";
-	private static final String OFFBOARDING_STATUS_QUEUE = "permissions.offboarding.status";
+	private static final String OFFBOARDING_STATUS_QUEUE = "permissions_offboarding_status";
 	private static final String ROUTING_OFFBOARDING_STATUS = "offboarding.status";
 
 	@Bean
@@ -52,7 +52,8 @@ public class BeanConfiguration {
 
 	@Bean
 	public Binding offboardingStatusBinding(Queue offboardingStatusQueue, TopicExchange permissionEventsExchange) {
-		return BindingBuilder.bind(offboardingStatusQueue).to(permissionEventsExchange).with(ROUTING_OFFBOARDING_STATUS);
+		return BindingBuilder.bind(offboardingStatusQueue).to(permissionEventsExchange)
+				.with(ROUTING_OFFBOARDING_STATUS);
 	}
 
 	@Bean
