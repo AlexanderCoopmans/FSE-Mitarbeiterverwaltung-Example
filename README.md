@@ -90,6 +90,16 @@ Starten Sie mit `docker compose up` im Terminal
       "model": "Thinkpad T480"
     }
     ```
+- **Device-Management:** PUT `/devices/{id}`
+  - Eingabe: `id = 101`
+  - Eingabe (application/json):
+    ```json
+    {
+      "type": "NOTEBOOK",
+      "manufacturer": null,
+      "model": null
+    }
+    ```
 
 ### Gerät einem Mitarbeiter zuordnen
 
