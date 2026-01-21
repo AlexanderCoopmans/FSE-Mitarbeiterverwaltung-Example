@@ -1,8 +1,7 @@
 package com.Mitarbeiterverwaltung.HrManagement.gateways.web.dto;
 
-import java.time.LocalDate;
-
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class EmploymentContractResponse {
     private String jobTitle;
@@ -13,8 +12,11 @@ public class EmploymentContractResponse {
     private LocalDate endDate;
     private String status;
 
-    public EmploymentContractResponse(String jobTitle, String responsibilities, BigDecimal annualSalary,
-            String currency, LocalDate startDate, LocalDate endDate, String status) {
+    public EmploymentContractResponse() {
+    }
+
+    public EmploymentContractResponse(String jobTitle, String responsibilities, BigDecimal annualSalary, String currency,
+            LocalDate startDate, LocalDate endDate, String status) {
         this.jobTitle = jobTitle;
         this.responsibilities = responsibilities;
         this.annualSalary = annualSalary;
@@ -28,27 +30,55 @@ public class EmploymentContractResponse {
         return jobTitle;
     }
 
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
     public String getResponsibilities() {
         return responsibilities;
+    }
+
+    public void setResponsibilities(String responsibilities) {
+        this.responsibilities = responsibilities;
     }
 
     public BigDecimal getAnnualSalary() {
         return annualSalary;
     }
 
+    public void setAnnualSalary(BigDecimal annualSalary) {
+        this.annualSalary = annualSalary;
+    }
+
     public String getCurrency() {
         return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public LocalDate getStartDate() {
         return startDate;
     }
 
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
     public LocalDate getEndDate() {
         return endDate;
     }
 
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
     public String getStatus() {
         return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -39,12 +39,8 @@ public final class EmploymentContract {
         if (date.isBefore(startDate)) {
             return false;
         }
-        if (endDate == null) {
-            return true;
-        }
         return !date.isAfter(endDate); 
     }
-//terminationDate ist wichtiger als endDate
 
     public String getJobTitle() {
         return jobTitle;

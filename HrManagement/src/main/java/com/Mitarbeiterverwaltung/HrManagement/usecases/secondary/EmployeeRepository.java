@@ -5,15 +5,14 @@ import java.util.List;
 import java.util.Optional;
 
 import com.Mitarbeiterverwaltung.HrManagement.domain.Employee;
-import com.Mitarbeiterverwaltung.HrManagement.domain.EmployeeNumber;
 import com.Mitarbeiterverwaltung.HrManagement.domain.EmploymentContract;
 
 public interface EmployeeRepository {
-    Employee save(Employee employee);
+    Optional<Employee> findById(int employeeId);
 
-    Optional<Employee> findEmployee(EmployeeNumber employeeNumber);
+    Employee save(Employee employee);
 
     List<Employee> findEmployeesActiveAt(LocalDate date);
 
-    EmploymentContract saveContract(EmployeeNumber employeeNumber, EmploymentContract contract);
+    Optional<EmploymentContract> addContract(int employeeId, EmploymentContract contract);
 }

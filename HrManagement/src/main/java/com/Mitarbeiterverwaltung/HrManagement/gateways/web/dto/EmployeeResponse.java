@@ -6,39 +6,66 @@ public class EmployeeResponse {
     private String lastName;
     private AddressResponse address;
     private BankAccountResponse bankAccount;
-    private EmploymentContractResponse contract;
+    private EmploymentContractResponse employmentContract;
+
+    public EmployeeResponse() {
+    }
 
     public EmployeeResponse(int employeeId, String firstName, String lastName, AddressResponse address,
-            BankAccountResponse bankAccount, EmploymentContractResponse contract) {
+            BankAccountResponse bankAccount, EmploymentContractResponse employmentContract) {
         this.employeeId = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.bankAccount = bankAccount;
-        this.contract = contract;
+        this.employmentContract = employmentContract;
     }
 
     public int getEmployeeId() {
         return employeeId;
     }
 
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
+    }
+
     public String getFirstName() {
         return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     public AddressResponse getAddress() {
         return address;
+    }
+
+    public void setAddress(AddressResponse address) {
+        this.address = address;
     }
 
     public BankAccountResponse getBankAccount() {
         return bankAccount;
     }
 
-    public EmploymentContractResponse getContract() {
-        return contract;
+    public void setBankAccount(BankAccountResponse bankAccount) {
+        this.bankAccount = bankAccount;
+    }
+
+    public EmploymentContractResponse getEmploymentContract() {
+        return employmentContract;
+    }
+
+    public void setEmploymentContract(EmploymentContractResponse employmentContract) {
+        this.employmentContract = employmentContract;
     }
 }

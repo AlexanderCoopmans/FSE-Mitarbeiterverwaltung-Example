@@ -5,6 +5,9 @@ public class BankAccountResponse {
     private String bic;
     private String accountHolder;
 
+    public BankAccountResponse() {
+    }
+
     public BankAccountResponse(String iban, String bic, String accountHolder) {
         this.iban = iban;
         this.bic = bic;
@@ -15,11 +18,23 @@ public class BankAccountResponse {
         return iban;
     }
 
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
     public String getBic() {
         return bic;
     }
 
+    public void setBic(String bic) {
+        this.bic = bic;
+    }
+
     public String getAccountHolder() {
         return accountHolder;
+    }
+
+    public void setAccountHolder(String accountHolder) {
+        this.accountHolder = accountHolder;
     }
 }

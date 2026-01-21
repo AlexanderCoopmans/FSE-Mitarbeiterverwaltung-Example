@@ -5,14 +5,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.Mitarbeiterverwaltung.HrManagement.domain.Employee;
-import com.Mitarbeiterverwaltung.HrManagement.domain.EmployeeNumber;
 import com.Mitarbeiterverwaltung.HrManagement.domain.EmploymentContract;
 import com.Mitarbeiterverwaltung.HrManagement.domain.TerminationProcessInformation;
 import com.Mitarbeiterverwaltung.HrManagement.usecases.primary.HrManagementService;
 import com.Mitarbeiterverwaltung.HrManagement.usecases.secondary.EmployeeRepository;
 import com.Mitarbeiterverwaltung.HrManagement.usecases.secondary.EmploymentTerminatedEventPublisher;
 
+@Transactional
 public class HrManagementServiceImpl implements HrManagementService {
 
     private final EmployeeRepository employeeRepository;
@@ -29,69 +31,73 @@ public class HrManagementServiceImpl implements HrManagementService {
         if (employee == null) {
             return Optional.empty();
         }
+        int employeeId = employee.getEmployeeNumber().getValue();
+        if (employeeRepository.findById(employeeId).isPresent()) {
+            return Optional.empty();
+        }
         Employee saved = employeeRepository.save(employee);
         return Optional.ofNullable(saved);
     }
 
     @Override
     public Optional<Employee> getEmployee(int employeeId) {
-        return employeeRepository.findEmployee(EmployeeNumber.of(employeeId));
+        return employeeRepository.findById(employeeId);
     }
 
     @Override
-    public List<Employee> getEmployeesActiveAt(LocalDate activeAt) {
-        LocalDate targetDate = activeAt != null ? activeAt : LocalDate.now();
+    public List<Employee> getEmployeesActiveAt(LocalDate date) {
+        LocalDate targetDate = date != null ? date : LocalDate.now();
         return employeeRepository.findEmployeesActiveAt(targetDate);
     }
 
     @Override
     public Optional<EmploymentContract> addEmploymentContract(int employeeId, EmploymentContract contract) {
-        if (contract == null) {
+        Optional<Employee> employeeOpt = employeeRepository.findById(employeeId);
+        if (employeeOpt.isEmpty()) {
             return Optional.empty();
         }
-        Optional<Employee> existing = employeeRepository.findEmployee(EmployeeNumber.of(employeeId));
-        if (existing.isEmpty()) {
-            return Optional.empty();
+        Employee employee = employeeOpt.get();
+        if (employee.getTerminationProcessInformation().isPresent()) {
+            throw new IllegalStateException("Termination process already started");
         }
-        EmploymentContract savedContract = employeeRepository.saveContract(EmployeeNumber.of(employeeId), contract);
-        return Optional.ofNullable(savedContract);
+        return employeeRepository.addContract(employeeId, contract);
     }
 
     @Override
     public Optional<Employee> terminateContract(int employeeId, LocalDate terminationDate, String reason) {
-        Optional<Employee> employeeOpt = employeeRepository.findEmployee(EmployeeNumber.of(employeeId));
+        Optional<Employee> employeeOpt = employeeRepository.findById(employeeId);
         if (employeeOpt.isEmpty()) {
             return Optional.empty();
         }
         Employee employee = employeeOpt.get();
         employee.startTerminationProcess(terminationDate, reason);
-        EmploymentContract updatedContract = employee.getEmploymentContract().withEndDate(terminationDate);
-        employee = employee.withEmploymentContract(updatedContract);
         Employee saved = employeeRepository.save(employee);
-        employmentTerminatedEventPublisher.publishEmploymentTermination(saved.getEmployeeNumber().getValue(),
-                terminationDate);
+        employmentTerminatedEventPublisher.publishTermination(employeeId, terminationDate);
         return Optional.of(saved);
     }
 
     @Override
     public Optional<TerminationProcessInformation> getOffboardingStatus(int employeeId) {
-        return employeeRepository.findEmployee(EmployeeNumber.of(employeeId))
-                .flatMap(Employee::getTerminationProcessInformation);
+        return employeeRepository.findById(employeeId).flatMap(Employee::getTerminationProcessInformation);
     }
 
     @Override
-    public void handleAllDevicesReturned(int employeeId, LocalDate lastReturnDate) {
-        Optional<Employee> employeeOpt = employeeRepository.findEmployee(EmployeeNumber.of(employeeId));
-        if (employeeOpt.isEmpty()) {
-            return;
-        }
-        Employee employee = employeeOpt.get();
-        LocalDateTime timestamp = lastReturnDate != null ? lastReturnDate.atStartOfDay() : LocalDateTime.now();
-        try {
-            employee.recordDevicesReturned(timestamp);
-            employeeRepository.save(employee);
-        } catch (IllegalStateException ex) {
-            System.out.println("Termination process not started for employee " + employeeId);
-        }
+    public void recordSystemPermissionsRevoked(int employeeId, LocalDateTime revokedAt) {
+        employeeRepository.findById(employeeId).ifPresent(employee -> {
+            if (employee.getTerminationProcessInformation().isPresent()) {
+                employee.recordSystemPermissionsRevoked(revokedAt);
+                employeeRepository.save(employee);
+            }
+        });
+    }
+
+    @Override
+    public void recordDevicesReturned(int employeeId, LocalDateTime returnedAt) {
+        employeeRepository.findById(employeeId).ifPresent(employee -> {
+            if (employee.getTerminationProcessInformation().isPresent()) {
+                employee.recordDevicesReturned(returnedAt);
+                employeeRepository.save(employee);
+            }
+        });
     }
 }

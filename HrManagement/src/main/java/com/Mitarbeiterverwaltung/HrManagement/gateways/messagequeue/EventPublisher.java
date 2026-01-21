@@ -12,9 +12,8 @@ public class EventPublisher {
 
     public String publishEvent(String exchange, String routingKey, String payload) {
         Object response = rabbitTemplate.convertSendAndReceive(exchange, routingKey, payload);
-        System.out.println("!!!MESSAGE SENT!!!! " + payload);
         if (response != null) {
-            return (String) response;
+            return response.toString();
         }
         return "Response could not be received.";
     }

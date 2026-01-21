@@ -17,15 +17,13 @@ public class EmploymentTerminatedEventPublisherImpl implements EmploymentTermina
     }
 
     @Override
-    public String publishEmploymentTermination(int employeeId, LocalDate terminationDate) {
+    public String publishTermination(int employeeId, LocalDate terminationDate) {
         EmploymentTerminatedTO payloadBody = new EmploymentTerminatedTO(employeeId, terminationDate);
-        String payload;
         try {
-            payload = objectMapper.writeValueAsString(payloadBody);
+            String payload = objectMapper.writeValueAsString(payloadBody);
+            return eventPublisher.publishEvent("hr.events", "employment.terminated", payload);
         } catch (JsonProcessingException e) {
-            System.out.println("Message could not be created. Cause: " + e.getMessage());
             return "Message could not be created.";
         }
-        return eventPublisher.publishEvent("hr.events", "employment.terminated", payload);
     }
 }

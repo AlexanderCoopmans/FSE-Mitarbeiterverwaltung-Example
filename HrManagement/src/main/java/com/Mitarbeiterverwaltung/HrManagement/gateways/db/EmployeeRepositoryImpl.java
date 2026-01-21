@@ -1,207 +1,127 @@
 package com.Mitarbeiterverwaltung.HrManagement.gateways.db;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.transaction.annotation.Transactional;
 
 import com.Mitarbeiterverwaltung.HrManagement.domain.Address;
 import com.Mitarbeiterverwaltung.HrManagement.domain.BankAccount;
 import com.Mitarbeiterverwaltung.HrManagement.domain.Employee;
 import com.Mitarbeiterverwaltung.HrManagement.domain.EmployeeNumber;
 import com.Mitarbeiterverwaltung.HrManagement.domain.EmploymentContract;
-import com.Mitarbeiterverwaltung.HrManagement.domain.Money;
 import com.Mitarbeiterverwaltung.HrManagement.domain.Name;
 import com.Mitarbeiterverwaltung.HrManagement.domain.TerminationProcessInformation;
 import com.Mitarbeiterverwaltung.HrManagement.domain.TerminationStatus;
 import com.Mitarbeiterverwaltung.HrManagement.usecases.secondary.EmployeeRepository;
 
+@Transactional
 public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     private final EmployeeEntityRepository employeeEntityRepository;
-    private final EmploymentContractEntityRepository employmentContractEntityRepository;
 
-    public EmployeeRepositoryImpl(EmployeeEntityRepository employeeEntityRepository,
-            EmploymentContractEntityRepository employmentContractEntityRepository) {
+    public EmployeeRepositoryImpl(EmployeeEntityRepository employeeEntityRepository) {
         this.employeeEntityRepository = employeeEntityRepository;
-        this.employmentContractEntityRepository = employmentContractEntityRepository;
+    }
+
+    @Override
+    public Optional<Employee> findById(int employeeId) {
+        Optional<EmployeeEntity> entityOpt = employeeEntityRepository.findById(employeeId);
+        if (entityOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        return entityOpt.map(this::toDomain);
     }
 
     @Override
     public Employee save(Employee employee) {
-        EmployeeEntity employeeEntity = toEntity(employee);
-        employeeEntityRepository.save(employeeEntity);
-        EmploymentContract persistedContract = upsertContract(employee.getEmployeeNumber().getValue(),
-                employee.getEmploymentContract());
-        return employee.withEmploymentContract(persistedContract);
+        EmployeeEntity entity = toEntity(employee);
+        employeeEntityRepository.save(entity);
+        return toDomain(entity);
     }
 
     @Override
-    public Optional<Employee> findEmployee(EmployeeNumber employeeNumber) {
-        Optional<EmployeeEntity> employeeEntity = employeeEntityRepository.findById(employeeNumber.getValue());
-        if (employeeEntity.isEmpty()) {
-            return Optional.empty();
-        }
-        List<EmploymentContractEntity> contracts = employmentContractEntityRepository
-                .findByEmployeeIdOrderByStartDateDesc(employeeNumber.getValue());
-        EmploymentContractEntity currentContractEntity = selectCurrentContract(contracts, LocalDate.now());
-        if (currentContractEntity == null) {
-            return Optional.empty();
-        }
-        EmploymentContract contract = toDomainContract(currentContractEntity);
-        Employee employee = toDomainEmployee(employeeEntity.get(), contract);
-        return Optional.ofNullable(employee);
+        public List<Employee> findEmployeesActiveAt(LocalDate date) {
+        return employeeEntityRepository.findAll().stream()
+            .map(this::toDomain)
+            .filter(Objects::nonNull)
+            .filter(emp -> emp.isActiveOn(date))
+            .collect(Collectors.toList());
     }
 
     @Override
-    public List<Employee> findEmployeesActiveAt(LocalDate date) {
-        List<EmploymentContractEntity> activeContracts = employmentContractEntityRepository.findActiveOn(date);
-        Set<Integer> processedEmployees = new HashSet<>();
-        List<Employee> employees = new ArrayList<>();
-        for (EmploymentContractEntity contractEntity : activeContracts) {
-            if (processedEmployees.contains(contractEntity.getEmployeeId())) {
-                continue;
-            }
-            Optional<EmployeeEntity> employeeEntity = employeeEntityRepository.findById(contractEntity.getEmployeeId());
-            if (employeeEntity.isEmpty()) {
-                continue;
-            }
-            EmploymentContract contract = toDomainContract(contractEntity);
-            Employee employee = toDomainEmployee(employeeEntity.get(), contract);
-            if (employee != null) {
-                employees.add(employee);
-                processedEmployees.add(contractEntity.getEmployeeId());
-            }
-        }
-        return employees;
+    public Optional<EmploymentContract> addContract(int employeeId, EmploymentContract contract) {
+        return employeeEntityRepository.findById(employeeId)
+                .map(entity -> {
+                    entity.setJobTitle(contract.getJobTitle());
+                    entity.setResponsibilities(contract.getResponsibilities());
+                    entity.setAnnualSalary(contract.getAnnualSalary().getAmount());
+                    entity.setCurrency(contract.getAnnualSalary().getCurrency());
+                    entity.setContractStartDate(contract.getStartDate());
+                    entity.setContractEndDate(contract.getEndDate());
+                    employeeEntityRepository.save(entity);
+                    return contract;
+                });
     }
 
-    @Override
-    public EmploymentContract saveContract(EmployeeNumber employeeNumber, EmploymentContract contract) {
-        List<EmploymentContractEntity> existingContracts = employmentContractEntityRepository
-                .findByEmployeeIdOrderByStartDateDesc(employeeNumber.getValue());
-        EmploymentContractEntity activeContract = selectCurrentContract(existingContracts, contract.getStartDate());
-        if (activeContract != null) {
-            LocalDate newEndDate = contract.getStartDate().minusDays(1);
-            if (activeContract.getEndDate() == null || activeContract.getEndDate().isAfter(newEndDate)) {
-                activeContract.setEndDate(newEndDate);
-            }
-            activeContract.setStatus(resolveStatus(activeContract.getEndDate()));
-            employmentContractEntityRepository.save(activeContract);
-        }
-        EmploymentContractEntity entity = toEntity(employeeNumber.getValue(), contract);
-        EmploymentContractEntity saved = employmentContractEntityRepository.save(entity);
-        return toDomainContract(saved);
-    }
-
-    private EmploymentContract upsertContract(int employeeId, EmploymentContract contract) {
-        if (contract == null) {
-            return null;
-        }
-        EmploymentContractEntity entity = toEntity(employeeId, contract);
-        entity.setStatus(resolveStatus(contract.getEndDate()));
-        EmploymentContractEntity saved = employmentContractEntityRepository.save(entity);
-        return toDomainContract(saved);
-    }
-
-    private String resolveStatus(LocalDate endDate) {
-        if (endDate == null) {
-            return "ACTIVE";
-        }
-        return endDate.isBefore(LocalDate.now()) ? "TERMINATED" : "ACTIVE";
-    }
-
-    private EmploymentContractEntity selectCurrentContract(List<EmploymentContractEntity> contracts, LocalDate date) {
-        if (contracts == null || contracts.isEmpty()) {
-            return null;
-        }
-        for (EmploymentContractEntity entity : contracts) {
-            boolean startsBefore = entity.getStartDate() == null || !entity.getStartDate().isAfter(date);
-            boolean endsAfter = entity.getEndDate() == null || !entity.getEndDate().isBefore(date);
-            if (startsBefore && endsAfter) {
-                return entity;
-            }
-        }
-        return contracts.get(0);
-    }
-
-    private EmploymentContractEntity toEntity(int employeeId, EmploymentContract contract) {
-        EmploymentContractEntity entity = new EmploymentContractEntity();
-        entity.setEmployeeId(employeeId);
-        Long existingId = findExistingContractId(employeeId, contract.getStartDate());
-        if (existingId != null) {
-            entity.setId(existingId);
-        }
-        entity.setJobTitle(contract.getJobTitle());
-        entity.setResponsibilities(contract.getResponsibilities());
-        entity.setAnnualSalary(contract.getAnnualSalary().getAmount());
-        entity.setCurrency(contract.getAnnualSalary().getCurrency());
-        entity.setStartDate(contract.getStartDate());
-        entity.setEndDate(contract.getEndDate());
-        entity.setStatus(resolveStatus(contract.getEndDate()));
-        return entity;
-    }
-
-    private EmploymentContract toDomainContract(EmploymentContractEntity entity) {
+    private Employee toDomain(EmployeeEntity entity) {
         if (entity == null) {
             return null;
         }
-        Money salary = Money.of(entity.getAnnualSalary(), entity.getCurrency());
-        return EmploymentContract.of(entity.getJobTitle(), entity.getResponsibilities(), salary,
-                entity.getStartDate(), entity.getEndDate());
-    }
-
-    private Long findExistingContractId(int employeeId, LocalDate startDate) {
-        if (startDate == null) {
-            return null;
-        }
-        return employmentContractEntityRepository.findByEmployeeIdOrderByStartDateDesc(employeeId).stream()
-                .filter(entity -> startDate.equals(entity.getStartDate()))
-                .map(EmploymentContractEntity::getId)
-                .findFirst()
-                .orElse(null);
-    }
-
-    private Employee toDomainEmployee(EmployeeEntity entity, EmploymentContract contract) {
-        if (contract == null) {
-            return null;
-        }
-        Name name = Name.of(entity.getFirstName(), entity.getLastName());
-        Address address = Address.of(entity.getStreet(), entity.getHouseNumber(), entity.getPostalCode(),
-                entity.getCity(), entity.getCountry());
-        BankAccount bankAccount = BankAccount.of(entity.getIban(), entity.getBic(), entity.getAccountHolder());
+        EmploymentContract contract = EmploymentContract.of(entity.getJobTitle(), entity.getResponsibilities(),
+                com.Mitarbeiterverwaltung.HrManagement.domain.Money.of(entity.getAnnualSalary(), entity.getCurrency()),
+                entity.getContractStartDate(), entity.getContractEndDate());
         TerminationProcessInformation termination = null;
         if (entity.getTerminationDate() != null && entity.getTerminationReason() != null) {
             TerminationStatus status = entity.getTerminationStatus() != null
                     ? TerminationStatus.valueOf(entity.getTerminationStatus())
                     : TerminationStatus.IN_PROGRESS;
             termination = TerminationProcessInformation.restore(entity.getTerminationDate(),
-                    entity.getTerminationReason(), status, entity.getSystemPermissionsRevokedAt(),
+                    entity.getTerminationReason(),
+                    status,
+                    entity.getSystemPermissionsRevokedAt(),
                     entity.getDevicesReturnedAt());
         }
-        return Employee.restore(EmployeeNumber.of(entity.getId()), name, address, bankAccount, contract, termination);
+        return Employee.restore(
+                EmployeeNumber.of(entity.getId()),
+                Name.of(entity.getFirstName(), entity.getLastName()),
+                Address.of(entity.getStreet(), entity.getHouseNumber(), entity.getPostalCode(),
+                        entity.getCity(), entity.getCountry()),
+                BankAccount.of(entity.getIban(), entity.getBic(), entity.getAccountHolder()),
+                contract,
+                termination);
     }
 
     private EmployeeEntity toEntity(Employee employee) {
-        TerminationProcessInformation termination = employee.getTerminationProcessInformation().orElse(null);
-        return new EmployeeEntity(
-                employee.getEmployeeNumber().getValue(),
-                employee.getName().getFirstName(),
-                employee.getName().getLastName(),
-                employee.getAddress().getStreet(),
-                employee.getAddress().getHouseNumber(),
-                employee.getAddress().getPostalCode(),
-                employee.getAddress().getCity(),
-                employee.getAddress().getCountry(),
-                employee.getBankAccount().getIban(),
-                employee.getBankAccount().getBic(),
-                employee.getBankAccount().getAccountHolder(),
-                termination != null ? termination.getTerminationDate() : null,
-                termination != null ? termination.getTerminationReason() : null,
-                termination != null ? termination.getStatus().name() : null,
-                termination != null ? termination.getLastSystemPermissionRevokedAt() : null,
-                termination != null ? termination.getLastDevicesReturnedAt() : null);
+        EmployeeEntity entity = new EmployeeEntity();
+        entity.setId(employee.getEmployeeNumber().getValue());
+        entity.setFirstName(employee.getName().getFirstName());
+        entity.setLastName(employee.getName().getLastName());
+        entity.setStreet(employee.getAddress().getStreet());
+        entity.setHouseNumber(employee.getAddress().getHouseNumber());
+        entity.setPostalCode(employee.getAddress().getPostalCode());
+        entity.setCity(employee.getAddress().getCity());
+        entity.setCountry(employee.getAddress().getCountry());
+        entity.setIban(employee.getBankAccount().getIban());
+        entity.setBic(employee.getBankAccount().getBic());
+        entity.setAccountHolder(employee.getBankAccount().getAccountHolder());
+
+        employee.getTerminationProcessInformation().ifPresentOrElse(info -> {
+            entity.setTerminationDate(info.getTerminationDate());
+            entity.setTerminationReason(info.getTerminationReason());
+            entity.setTerminationStatus(info.getStatus().name());
+            entity.setSystemPermissionsRevokedAt(info.getLastSystemPermissionRevokedAt());
+            entity.setDevicesReturnedAt(info.getLastDevicesReturnedAt());
+        }, () -> {
+            entity.setTerminationDate(null);
+            entity.setTerminationReason(null);
+            entity.setTerminationStatus(null);
+            entity.setSystemPermissionsRevokedAt(null);
+            entity.setDevicesReturnedAt(null);
+        });
+        return entity;
     }
 }

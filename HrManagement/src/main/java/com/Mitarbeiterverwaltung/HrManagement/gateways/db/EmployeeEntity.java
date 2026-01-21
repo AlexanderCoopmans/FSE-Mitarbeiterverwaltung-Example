@@ -2,13 +2,14 @@ package com.Mitarbeiterverwaltung.HrManagement.gateways.db;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "employees")
+@Table(name = "employee_entity")
 public class EmployeeEntity {
 
     @Id
@@ -23,6 +24,12 @@ public class EmployeeEntity {
     private String iban;
     private String bic;
     private String accountHolder;
+    private String jobTitle;
+    private String responsibilities;
+    private BigDecimal annualSalary;
+    private String currency;
+    private LocalDate contractStartDate;
+    private LocalDate contractEndDate;
     private LocalDate terminationDate;
     private String terminationReason;
     private String terminationStatus;
@@ -34,6 +41,8 @@ public class EmployeeEntity {
 
     public EmployeeEntity(int id, String firstName, String lastName, String street, String houseNumber,
             String postalCode, String city, String country, String iban, String bic, String accountHolder,
+            String jobTitle, String responsibilities, BigDecimal annualSalary, String currency,
+            LocalDate contractStartDate, LocalDate contractEndDate,
             LocalDate terminationDate, String terminationReason, String terminationStatus,
             LocalDateTime systemPermissionsRevokedAt, LocalDateTime devicesReturnedAt) {
         this.id = id;
@@ -47,6 +56,12 @@ public class EmployeeEntity {
         this.iban = iban;
         this.bic = bic;
         this.accountHolder = accountHolder;
+        this.jobTitle = jobTitle;
+        this.responsibilities = responsibilities;
+        this.annualSalary = annualSalary;
+        this.currency = currency;
+        this.contractStartDate = contractStartDate;
+        this.contractEndDate = contractEndDate;
         this.terminationDate = terminationDate;
         this.terminationReason = terminationReason;
         this.terminationStatus = terminationStatus;
@@ -140,6 +155,54 @@ public class EmployeeEntity {
 
     public void setAccountHolder(String accountHolder) {
         this.accountHolder = accountHolder;
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public String getResponsibilities() {
+        return responsibilities;
+    }
+
+    public void setResponsibilities(String responsibilities) {
+        this.responsibilities = responsibilities;
+    }
+
+    public BigDecimal getAnnualSalary() {
+        return annualSalary;
+    }
+
+    public void setAnnualSalary(BigDecimal annualSalary) {
+        this.annualSalary = annualSalary;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public LocalDate getContractStartDate() {
+        return contractStartDate;
+    }
+
+    public void setContractStartDate(LocalDate contractStartDate) {
+        this.contractStartDate = contractStartDate;
+    }
+
+    public LocalDate getContractEndDate() {
+        return contractEndDate;
+    }
+
+    public void setContractEndDate(LocalDate contractEndDate) {
+        this.contractEndDate = contractEndDate;
     }
 
     public LocalDate getTerminationDate() {

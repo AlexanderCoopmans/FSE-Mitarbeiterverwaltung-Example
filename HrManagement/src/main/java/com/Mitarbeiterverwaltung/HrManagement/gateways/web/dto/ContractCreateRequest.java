@@ -11,6 +11,9 @@ public class ContractCreateRequest {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    public ContractCreateRequest() {
+    }
+
     public String getJobTitle() {
         return jobTitle;
     }

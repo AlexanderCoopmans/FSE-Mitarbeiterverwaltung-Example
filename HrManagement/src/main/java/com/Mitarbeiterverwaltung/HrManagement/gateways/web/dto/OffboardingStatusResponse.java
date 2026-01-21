@@ -5,19 +5,22 @@ import java.time.LocalDateTime;
 
 public class OffboardingStatusResponse {
     private LocalDate terminationDate;
-    private String reason;
-    private String status;
+    private String terminationReason;
+    private String terminationStatus;
     private boolean systemPermissionsRevoked;
     private LocalDateTime lastSystemPermissionRevokedAt;
     private boolean devicesReturned;
     private LocalDateTime lastDevicesReturnedAt;
 
-    public OffboardingStatusResponse(LocalDate terminationDate, String reason, String status,
+    public OffboardingStatusResponse() {
+    }
+
+    public OffboardingStatusResponse(LocalDate terminationDate, String terminationReason, String terminationStatus,
             boolean systemPermissionsRevoked, LocalDateTime lastSystemPermissionRevokedAt, boolean devicesReturned,
             LocalDateTime lastDevicesReturnedAt) {
         this.terminationDate = terminationDate;
-        this.reason = reason;
-        this.status = status;
+        this.terminationReason = terminationReason;
+        this.terminationStatus = terminationStatus;
         this.systemPermissionsRevoked = systemPermissionsRevoked;
         this.lastSystemPermissionRevokedAt = lastSystemPermissionRevokedAt;
         this.devicesReturned = devicesReturned;
@@ -28,27 +31,55 @@ public class OffboardingStatusResponse {
         return terminationDate;
     }
 
-    public String getReason() {
-        return reason;
+    public void setTerminationDate(LocalDate terminationDate) {
+        this.terminationDate = terminationDate;
     }
 
-    public String getStatus() {
-        return status;
+    public String getTerminationReason() {
+        return terminationReason;
+    }
+
+    public void setTerminationReason(String terminationReason) {
+        this.terminationReason = terminationReason;
+    }
+
+    public String getTerminationStatus() {
+        return terminationStatus;
+    }
+
+    public void setTerminationStatus(String terminationStatus) {
+        this.terminationStatus = terminationStatus;
     }
 
     public boolean isSystemPermissionsRevoked() {
         return systemPermissionsRevoked;
     }
 
+    public void setSystemPermissionsRevoked(boolean systemPermissionsRevoked) {
+        this.systemPermissionsRevoked = systemPermissionsRevoked;
+    }
+
     public LocalDateTime getLastSystemPermissionRevokedAt() {
         return lastSystemPermissionRevokedAt;
+    }
+
+    public void setLastSystemPermissionRevokedAt(LocalDateTime lastSystemPermissionRevokedAt) {
+        this.lastSystemPermissionRevokedAt = lastSystemPermissionRevokedAt;
     }
 
     public boolean isDevicesReturned() {
         return devicesReturned;
     }
 
+    public void setDevicesReturned(boolean devicesReturned) {
+        this.devicesReturned = devicesReturned;
+    }
+
     public LocalDateTime getLastDevicesReturnedAt() {
         return lastDevicesReturnedAt;
+    }
+
+    public void setLastDevicesReturnedAt(LocalDateTime lastDevicesReturnedAt) {
+        this.lastDevicesReturnedAt = lastDevicesReturnedAt;
     }
 }

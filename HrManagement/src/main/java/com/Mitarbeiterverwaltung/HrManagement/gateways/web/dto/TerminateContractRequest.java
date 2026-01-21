@@ -6,6 +6,9 @@ public class TerminateContractRequest {
     private LocalDate terminationDate;
     private String reason;
 
+    public TerminateContractRequest() {
+    }
+
     public LocalDate getTerminationDate() {
         return terminationDate;
     }

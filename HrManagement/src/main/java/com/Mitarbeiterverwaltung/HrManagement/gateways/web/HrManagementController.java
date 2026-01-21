@@ -121,7 +121,7 @@ public class HrManagementController {
             @ApiResponse(responseCode = "200", description = "Kuendigung verbucht"),
             @ApiResponse(responseCode = "404", description = "Mitarbeiter nicht gefunden"),
             @ApiResponse(responseCode = "409", description = "Kuendigung ungueltig") })
-        @PatchMapping("/employees/{id}/terminate")
+        @PatchMapping("/employees/{id}/termination")
         public ResponseEntity<?> terminateContract(@PathVariable("id") int employeeId,
             @RequestBody TerminateContractRequest request) {
         if (request == null || request.getTerminationDate() == null || isBlank(request.getReason())) {

@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class EmployeeCreateRequest {
+    private Integer employeeId;
     private String firstName;
     private String lastName;
-    private Integer employeeId;
     private String street;
     private String houseNumber;
     private String postalCode;
@@ -22,6 +22,17 @@ public class EmployeeCreateRequest {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    public EmployeeCreateRequest() {
+    }
+
+    public Integer getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Integer employeeId) {
+        this.employeeId = employeeId;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -36,14 +47,6 @@ public class EmployeeCreateRequest {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public Integer getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(Integer employeeId) {
-        this.employeeId = employeeId;
     }
 
     public String getStreet() {
