@@ -5,8 +5,8 @@ Starten Sie mit `docker compose up` im Terminal
 ## Swagger UI
 
 - [HR-Management](http://localhost:8081/swagger-ui/index.html)
-- [Berechtigungsmanagement](http://localhost:8082/swagger-ui/index.html)
-- [Device-Management](http://localhost:8083/swagger-ui/index.html)
+- [Device-Management](http://localhost:8082/swagger-ui/index.html)
+- [Berechtigungsmanagement](http://localhost:8083/swagger-ui/index.html)
 
 ## Beispiele
 
