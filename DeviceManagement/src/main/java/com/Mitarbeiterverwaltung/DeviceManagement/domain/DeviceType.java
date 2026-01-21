@@ -4,5 +4,6 @@ public enum DeviceType {
     PC,
     NOTEBOOK,
     TABLET,
-    SMARTPHONE
+    SMARTPHONE,
+    MONITOR
 }
