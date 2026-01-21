@@ -6,6 +6,7 @@ import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -30,7 +31,8 @@ public class BeanConfiguration {
 	private static final String PERMISSIONS_EVENTS_EXCHANGE = "permissions.events";
 	private static final String PERMISSIONS_ROUTING_OFFBOARDING_STATUS = "offboarding.status";
 	private static final String PERMISSIONS_OFFBOARDING_STATUS_QUEUE = "permissions_offboarding_status";
-	private static final String HR_EMPLOYMENT_TERMINATED_QUEUE = "employment_terminated";
+	private static final String HR_EMPLOYMENT_TERMINATED_DEVICES_QUEUE = "employment_terminated_devices";
+	private static final String HR_EMPLOYMENT_TERMINATED_PERMISSIONS_QUEUE = "employment_terminated_permissions";
 
 	@Bean
 	public EmployeeRepository employeeRepository(EmployeeEntityRepository employeeEntityRepository) {
@@ -43,13 +45,29 @@ public class BeanConfiguration {
 	}
 
 	@Bean
-	public Queue employmentTerminatedQueue() {
-		return new Queue(HR_EMPLOYMENT_TERMINATED_QUEUE, true);
+	public Queue employmentTerminatedDevicesQueue() {
+		return new Queue(HR_EMPLOYMENT_TERMINATED_DEVICES_QUEUE, true);
 	}
 
 	@Bean
-	public Binding employmentTerminatedBinding(Queue employmentTerminatedQueue, DirectExchange hrEventsExchange) {
-		return BindingBuilder.bind(employmentTerminatedQueue)
+	public Queue employmentTerminatedPermissionsQueue() {
+		return new Queue(HR_EMPLOYMENT_TERMINATED_PERMISSIONS_QUEUE, true);
+	}
+
+	@Bean
+	public Binding employmentTerminatedDevicesBinding(
+			@Qualifier("employmentTerminatedDevicesQueue") Queue employmentTerminatedDevicesQueue,
+			DirectExchange hrEventsExchange) {
+		return BindingBuilder.bind(employmentTerminatedDevicesQueue)
+				.to(hrEventsExchange)
+				.with(HR_ROUTING_EMPLOYMENT_TERMINATED);
+	}
+
+	@Bean
+	public Binding employmentTerminatedPermissionsBinding(
+			@Qualifier("employmentTerminatedPermissionsQueue") Queue employmentTerminatedPermissionsQueue,
+			DirectExchange hrEventsExchange) {
+		return BindingBuilder.bind(employmentTerminatedPermissionsQueue)
 				.to(hrEventsExchange)
 				.with(HR_ROUTING_EMPLOYMENT_TERMINATED);
 	}

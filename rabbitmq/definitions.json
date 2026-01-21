@@ -29,7 +29,14 @@
       "arguments": { "x-queue-type": "classic" }
     },
     {
-      "name": "employment_terminated",
+      "name": "employment_terminated_devices",
+      "vhost": "rabbitmqhost",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": { "x-queue-type": "classic" }
+    },
+    {
+      "name": "employment_terminated_permissions",
       "vhost": "rabbitmqhost",
       "durable": true,
       "auto_delete": false,
@@ -84,7 +91,15 @@
     {
       "source": "hr.events",
       "vhost": "rabbitmqhost",
-      "destination": "employment_terminated",
+      "destination": "employment_terminated_devices",
+      "destination_type": "queue",
+      "routing_key": "employment.terminated",
+      "arguments": {}
+    },
+    {
+      "source": "hr.events",
+      "vhost": "rabbitmqhost",
+      "destination": "employment_terminated_permissions",
       "destination_type": "queue",
       "routing_key": "employment.terminated",
       "arguments": {}

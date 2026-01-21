@@ -27,7 +27,7 @@ public class BeanConfiguration {
 	private static final String ROUTING_OFFBOARDING_STATUS = "offboarding.status";
 	private static final String HR_EVENTS_EXCHANGE = "hr.events";
 	private static final String ROUTING_EMPLOYMENT_TERMINATED = "employment.terminated";
-	private static final String EMPLOYMENT_TERMINATED_QUEUE = "employment_terminated";
+	private static final String EMPLOYMENT_TERMINATED_QUEUE = "employment_terminated_permissions";
 
 	@Bean
 	public PermissionRepository permissionRepository(PermissionEntityRepository permissionEntityRepository) {
@@ -36,7 +36,7 @@ public class BeanConfiguration {
 
 	@Bean
 	public PermissionManagementService permissionManagementService(PermissionRepository permissionRepository,
-				OffboardingStatusEventPublisher offboardingStatusEventPublisher) {
+			OffboardingStatusEventPublisher offboardingStatusEventPublisher) {
 		return new PermissionManagementServiceImpl(permissionRepository, offboardingStatusEventPublisher);
 	}
 

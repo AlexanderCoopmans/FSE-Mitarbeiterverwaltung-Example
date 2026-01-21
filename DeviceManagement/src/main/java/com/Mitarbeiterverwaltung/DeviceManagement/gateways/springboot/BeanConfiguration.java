@@ -42,6 +42,6 @@ public class BeanConfiguration {
 
     @Bean
     public Queue employmentTerminatedQueue() {
-        return new Queue("employment_terminated", true);
+        return new Queue("employment_terminated_devices", true);
     }
 }
