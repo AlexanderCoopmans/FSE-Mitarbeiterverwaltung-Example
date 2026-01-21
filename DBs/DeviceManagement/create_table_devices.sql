@@ -2,7 +2,7 @@
 DROP TABLE IF EXISTS device_entity;
 
 CREATE TABLE device_entity (
-  id INT PRIMARY KEY,
+  id INT PRIMARY KEY AUTO_INCREMENT,
   device_type VARCHAR(50) NOT NULL,
   manufacturer VARCHAR(100) NOT NULL,
   designation VARCHAR(150) NOT NULL,
