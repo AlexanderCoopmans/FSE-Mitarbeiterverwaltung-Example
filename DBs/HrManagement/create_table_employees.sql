@@ -3,37 +3,37 @@ DROP TABLE IF EXISTS employee_entity;
 
 CREATE TABLE employee_entity (
     id INT PRIMARY KEY,
-    firstName VARCHAR(100) NOT NULL,
-    lastName VARCHAR(100) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
     street VARCHAR(150) NOT NULL,
-    houseNumber VARCHAR(20) NOT NULL,
-    postalCode VARCHAR(20) NOT NULL,
+    house_number VARCHAR(20) NOT NULL,
+    postal_code VARCHAR(20) NOT NULL,
     city VARCHAR(100) NOT NULL,
     country VARCHAR(100) NOT NULL,
     iban VARCHAR(50) NOT NULL,
     bic VARCHAR(50) NOT NULL,
-    accountHolder VARCHAR(150) NOT NULL,
-    jobTitle VARCHAR(150) NOT NULL,
+    account_holder VARCHAR(150) NOT NULL,
+    job_title VARCHAR(150) NOT NULL,
     responsibilities VARCHAR(500) NOT NULL,
-    annualSalary DECIMAL(15,2) NOT NULL,
+    annual_salary DECIMAL(15,2) NOT NULL,
     currency VARCHAR(10) NOT NULL,
-    contractStartDate DATE NOT NULL,
-    contractEndDate DATE,
-    terminationDate DATE,
-    terminationReason VARCHAR(255),
-    terminationStatus VARCHAR(50),
-    systemPermissionsRevokedAt DATETIME,
-    devicesReturnedAt DATETIME
+    contract_start_date DATE NOT NULL,
+    contract_end_date DATE,
+    termination_date DATE,
+    termination_reason VARCHAR(255),
+    termination_status VARCHAR(50),
+    system_permissions_revoked_at DATETIME,
+    devices_returned_at DATETIME
 );
 
 -- Beispiel-Daten (5 Mitarbeiter)
 INSERT INTO employee_entity (
-    id, firstName, lastName, street, houseNumber, postalCode, city, country,
-    iban, bic, accountHolder,
-    jobTitle, responsibilities, annualSalary, currency,
-    contractStartDate, contractEndDate,
-    terminationDate, terminationReason, terminationStatus,
-    systemPermissionsRevokedAt, devicesReturnedAt
+    id, first_name, last_name, street, house_number, postal_code, city, country,
+    iban, bic, account_holder,
+    job_title, responsibilities, annual_salary, currency,
+    contract_start_date, contract_end_date,
+    termination_date, termination_reason, termination_status,
+    system_permissions_revoked_at, devices_returned_at
 ) VALUES
 (1, 'Anna', 'Schmidt', 'Hauptstrasse', '12A', '10115', 'Berlin', 'Deutschland',
  'DE44500105175407324931', 'BELADEBEXXX', 'Anna Schmidt',
