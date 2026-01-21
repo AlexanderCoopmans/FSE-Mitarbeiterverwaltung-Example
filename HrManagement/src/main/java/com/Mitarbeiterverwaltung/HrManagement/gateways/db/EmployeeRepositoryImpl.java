@@ -109,6 +109,14 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         entity.setBic(employee.getBankAccount().getBic());
         entity.setAccountHolder(employee.getBankAccount().getAccountHolder());
 
+        var contract = employee.getEmploymentContract();
+        entity.setJobTitle(contract.getJobTitle());
+        entity.setResponsibilities(contract.getResponsibilities());
+        entity.setAnnualSalary(contract.getAnnualSalary().getAmount());
+        entity.setCurrency(contract.getAnnualSalary().getCurrency());
+        entity.setContractStartDate(contract.getStartDate());
+        entity.setContractEndDate(contract.getEndDate());
+
         employee.getTerminationProcessInformation().ifPresentOrElse(info -> {
             entity.setTerminationDate(info.getTerminationDate());
             entity.setTerminationReason(info.getTerminationReason());
