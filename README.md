@@ -1,6 +1,6 @@
 # FSE-Mitarbeiterverwaltung-Example
 
-Starten mit `docker compose up` im Terminal
+Starten Sie mit `docker compose up` im Terminal
 
 ## Swagger UI
 
@@ -10,33 +10,33 @@ Starten mit `docker compose up` im Terminal
 
 ## Beispiele
 
-### **Normalzustand abfragen**
+### Normalzustand abfragen
 
 - **HR-Management:** [GET](http://localhost:8081/employees) `/employees`
 - **Berechtigungsmanagement:** [GET](http://localhost:8083/permissions?employeeId=1) `/permissions`
-  - **Eingabe:** `employeeId=101`
+  - Eingabe: `employeeId=101`
 - **Device-Management:** [GET](http://localhost:8083/devices) `/devices`
 
-### **Kündigung**
+### Kündigung
 
-- **HR-Management:** PATCH: `/employees/{id}/termination`
-  - **Eingabe:** `id = 1`
+- **HR-Management:** PATCH `/employees/{id}/termination`
+  - Eingabe: `id = 1`
 
-### **Automatische Auswirkungen**
+### Automatische Auswirkungen
 
 - **Berechtigungsmanagement:** [GET](http://localhost:8083/permissions?employeeId=1) `/permissions`
-  - **Eingabe:** `employeeId = 101`
+  - Eingabe: `employeeId = 101`
 - **Device-Management:** [GET](http://localhost:8083/devices) `/devices`
 
-### **HR-Management Monitoring**
+### HR-Management: Monitoring
 
 - **HR-Management:** [GET](http://localhost:8081/employees/1/offboarding-status) `/employees/{id}/offboarding-status`
-  - **Eingabe:** `id = 1`
+  - Eingabe: `id = 1`
 
-### **Mitarbeiter Einstellen:**
+### Mitarbeiter einstellen
 
-- **HR-Management:** POST: `/employees`
-  - **Eingabe (application/json):**
+- **HR-Management:** POST `/employees`
+  - Eingabe (application/json):
     ```json
     {
       "employeeId": 6,
@@ -51,7 +51,7 @@ Starten mit `docker compose up` im Terminal
       "bic": "DRESDEFFXXX",
       "accountHolder": "Joachim Richard",
       "jobTitle": "Projektleiter",
-      "responsibilities": "Kaffe trinken, personalkoordination",
+      "responsibilities": "Kaffee trinken, Personalkoordination",
       "annualSalary": 67000,
       "currency": "Euro",
       "startDate": "2026-01-22",
@@ -59,11 +59,10 @@ Starten mit `docker compose up` im Terminal
     }
     ```
 
-### **Gerät Erstellen:**
+### Gerät erstellen
 
-- **Device-Management:** POST: `/devices`
-  - **Eingabe (application/json):**
-
+- **Device-Management:** POST `/devices`
+  - Eingabe (application/json):
     ```json
     {
       "type": "PC",
@@ -72,10 +71,10 @@ Starten mit `docker compose up` im Terminal
     }
     ```
 
-### Gerät Mitarbeiter zuordnen
+### Gerät einem Mitarbeiter zuordnen
 
-- **Device-Management:** POST: `/assignments`
-  - **Eingabe (application/json):**
+- **Device-Management:** POST `/assignments`
+  - Eingabe (application/json):
     ```json
     {
       "deviceId": 1,
@@ -85,10 +84,10 @@ Starten mit `docker compose up` im Terminal
     }
     ```
 
-### Mitarbeiter Systemberechtigung erteilen
+### Mitarbeiter Systemberechtigungen erteilen
 
-- **Berechtigungsmanagement:** POST: `/permissions`
-  - **Eingabe (application/json):**
+- **Berechtigungsmanagement:** POST `/permissions`
+  - Eingabe (application/json):
     ```json
     {
       "employeeId": 2,
