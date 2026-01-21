@@ -168,7 +168,6 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
 
     @Override
     public void handleEmploymentTermination(int employeeId, LocalDate terminationDate) {
-        System.out.println("LOL");
         List<Device> assignedDevices = findAssignmentsByEmployee(employeeId);
         for (Device device : assignedDevices) {
             device.getCurrentAssignment().shortenValidityTo(terminationDate);

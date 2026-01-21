@@ -57,6 +57,13 @@ public class HrManagementServiceImpl implements HrManagementService {
         Employee employee = employeeOpt.get();
         employee.startTerminationProcess(terminationDate, reason);
         Employee saved = employeeRepository.save(employee);
+
+        // Delaying the answer to prevent race conditions. TODO: Improve
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         employmentTerminatedEventPublisher.publishTermination(employeeId, terminationDate);
         return Optional.of(saved);
     }
