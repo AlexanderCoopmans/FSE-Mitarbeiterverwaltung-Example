@@ -13,7 +13,6 @@ import com.Mitarbeiterverwaltung.HrManagement.usecases.primary.HrManagementServi
 import com.Mitarbeiterverwaltung.HrManagement.usecases.secondary.EmployeeRepository;
 import com.Mitarbeiterverwaltung.HrManagement.usecases.secondary.EmploymentTerminatedEventPublisher;
 
-@Transactional
 public class HrManagementServiceImpl implements HrManagementService {
 
     private final EmployeeRepository employeeRepository;
@@ -48,7 +47,6 @@ public class HrManagementServiceImpl implements HrManagementService {
         LocalDate targetDate = date != null ? date : LocalDate.now();
         return employeeRepository.findEmployeesActiveAt(targetDate);
     }
-
 
     @Override
     public Optional<Employee> terminateContract(int employeeId, LocalDate terminationDate, String reason) {

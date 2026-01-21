@@ -18,7 +18,6 @@ import com.Mitarbeiterverwaltung.HrManagement.domain.TerminationProcessInformati
 import com.Mitarbeiterverwaltung.HrManagement.domain.TerminationStatus;
 import com.Mitarbeiterverwaltung.HrManagement.usecases.secondary.EmployeeRepository;
 
-@Transactional
 public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     private final EmployeeEntityRepository employeeEntityRepository;
@@ -44,12 +43,12 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-        public List<Employee> findEmployeesActiveAt(LocalDate date) {
+    public List<Employee> findEmployeesActiveAt(LocalDate date) {
         return employeeEntityRepository.findAll().stream()
-            .map(this::toDomain)
-            .filter(Objects::nonNull)
-            .filter(emp -> emp.isActiveOn(date))
-            .collect(Collectors.toList());
+                .map(this::toDomain)
+                .filter(Objects::nonNull)
+                .filter(emp -> emp.isActiveOn(date))
+                .collect(Collectors.toList());
     }
 
     @Override
