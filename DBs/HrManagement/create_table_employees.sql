@@ -60,7 +60,7 @@ INSERT INTO employee_entity (
  'DE75512108001245126199', 'HASPDEHHXXX', 'Lukas Fischer',
  'Data Engineer', 'Data Pipelines', 93000.00, 'EUR',
  '2023-06-01', '2026-06-01',
- '2026-02-28', 'Teamumbau', 'IN_PROGRESS',
+ NULL, NULL, NULL,
  NULL, NULL),
 
 (5, 'Mara', 'Nguyen', 'Eschenweg', '14', '60486', 'Frankfurt', 'Deutschland',
