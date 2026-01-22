@@ -174,6 +174,12 @@ public class DeviceManagementServiceImpl implements DeviceManagementService {
             deviceRepository.save(device);
         }
         if (assignedDevices.isEmpty()) {
+            // Delaying the answer to prevent race conditions. TODO: Improve
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             AllDevicesReturnedEvent event = new AllDevicesReturnedEvent(new EmployeeReference(employeeId),
                     LocalDate.now());
             allDevicesReturnedEventPublisher.publishDomainEvent(event);

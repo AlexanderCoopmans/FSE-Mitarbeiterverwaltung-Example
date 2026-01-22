@@ -58,7 +58,7 @@ public class HrManagementServiceImpl implements HrManagementService {
 
         // Delaying the answer to prevent race conditions. TODO: Improve
         try {
-            Thread.sleep(4000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

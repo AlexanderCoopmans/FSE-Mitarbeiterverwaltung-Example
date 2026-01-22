@@ -47,7 +47,8 @@ public class PermissionManagementServiceImpl implements PermissionManagementServ
     }
 
     @Override
-    public Optional<SystemPermission> updatePermission(PermissionId permissionId, Role newRole, LocalDate newValidUntil) {
+    public Optional<SystemPermission> updatePermission(PermissionId permissionId, Role newRole,
+            LocalDate newValidUntil) {
         return permissionRepository.findById(permissionId)
                 .map(permission -> {
                     permission.update(newRole, newValidUntil);
@@ -65,6 +66,12 @@ public class PermissionManagementServiceImpl implements PermissionManagementServ
         permission.revokeEffective(LocalDate.now());
         permissionRepository.save(permission);
         int employeeId = permission.getEmployeeReference().getEmployeeNumber();
+        // Delaying the answer to prevent race conditions. TODO: Improve
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         offboardingStatusEventPublisher.publishOffboardingStatus(employeeId, checkOffboardingStatus(employeeId));
         return true;
     }
